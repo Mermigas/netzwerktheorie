@@ -12,7 +12,7 @@ float roomHeight = 11.2;
 void setup() {
   size(640,420);
   //listen
-  oscP5 = new OscP5(this, 12001);
+  oscP5 = new OscP5(this, 12000);
   //send
   remoteLocation = new NetAddress("255.255.255.255", 12001);
 }
@@ -47,8 +47,12 @@ void oscEvent(OscMessage theOscMessage) {
     
     //count up the id
     id++;
-    
+    sendData();
     println(hey);
     println(id); 
   }
+}
+
+void online() {
+  
 }

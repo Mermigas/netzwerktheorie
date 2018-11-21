@@ -13,13 +13,16 @@ NetAddress remoteLocation;
 
 void setup(){
   size(1400,800);
-  //ID = 5;
+  ID = -1;
     // Listen on port 12001
   oscP5 = new OscP5(this, 12001);
   remoteLocation = new NetAddress("255.255.255.255", 12001);
   ownNetworkAddress = NetInfo.getHostAddress();
   rectMode(CENTER);
-    for(int i=0; i<=ID; i++){
+}
+void draw(){
+if (ID!=-1){
+      for(int i=0; i<=ID; i++){
     if(i<ID){
       drawLaptop(i, false);
     }else{
@@ -27,8 +30,6 @@ void setup(){
     }
   }
 }
-void draw(){
-
 }
 void drawLaptop(int laptopID, boolean visibilityState){
   color laptopColor;
@@ -77,8 +78,9 @@ void sendData() {
   oscP5.send(heyMessage, remoteLocation);
 }
 void oscEvent(OscMessage theOscMessage) {
-  String address = theOscMessage.address();
-  if (!address.contains(ownNetworkAddress))
+ // String address = theOscMessage.address();
+  //if (!address.contains(ownNetworkAddress))
+  if(theOscMessage.checkAddrPattern("/schall_2"))
   {
     ID = theOscMessage.get(0).intValue();
     roamWidth = theOscMessage.get(1).floatValue();

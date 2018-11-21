@@ -9,6 +9,8 @@ int id = -1;
 float roomWidth = 17.2;
 float roomHeight = 11.2;
 
+int statusId = -1;
+
 void setup() {
   size(640,420);
   //listen
@@ -18,7 +20,7 @@ void setup() {
 }
 
 void draw() {
-  
+  online();
 }
 
 //Send back to client: id, room width, room height
@@ -45,14 +47,29 @@ void oscEvent(OscMessage theOscMessage) {
     //save hey
     hey = theOscMessage.get(0).stringValue();
     
-    //count up the id
+    //count up the id and send id, roomWidth and roomLength back
     id++;
     sendData();
+    
     println(hey);
     println(id); 
+  }
+  
+  if(theOscMessage.checkAddrPattern("/status") == true) {
+    statusId = theOscMessage.get(0).intValue();
   }
 }
 
 void online() {
+  if(statusId == 0) {
+    text(0, width/2, 50);
+  }
   
+  if(statusId == 1) {
+    text(1, width/2, 100);
+  }
+  
+  if(statusId == 2) {
+    text(2, width/2, 150);
+  }
 }

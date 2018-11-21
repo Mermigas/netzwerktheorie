@@ -5,7 +5,7 @@ OscP5 oscP5;
 NetAddress remoteLocation;
 
 String hey = "hey";
-int id;
+int id = -1;
 
 float roomWidth, roomHeight;
 
@@ -18,7 +18,7 @@ void setup() {
 }
 
 void draw() {
-  
+  sendStatus();
 }
 
 void keyPressed() {
@@ -28,11 +28,19 @@ void keyPressed() {
 }
 
 void sendData() {
-  //send id
+  //send a friendly hey
   OscMessage sendHey = new OscMessage("/schall");
   sendHey.add(hey);
-  
   oscP5.send(sendHey, remoteLocation);
+}
+
+void sendStatus() {
+  //send your given id
+  if(id > -1) {
+    OscMessage sendId = new OscMessage("/status");
+    sendId.add(id);
+    oscP5.send(sendId, remoteLocation);
+  }
 }
 
 void oscEvent(OscMessage theOscMessage) {

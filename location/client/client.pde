@@ -12,12 +12,13 @@ OscP5 oscP5;
 NetAddress remoteLocation;
 
 void setup(){
-  size(1400,800);
+  size(800,600);
   ID = -1;
     // Listen on port 12001
   oscP5 = new OscP5(this, 12001);
   remoteLocation = new NetAddress("255.255.255.255", 12001);
   ownNetworkAddress = NetInfo.getHostAddress();
+  sendData();
   rectMode(CENTER);
 }
 void draw(){
@@ -33,7 +34,7 @@ if (ID!=-1){
 }
 void drawLaptop(int laptopID, boolean visibilityState){
   color laptopColor;
-  print(laptopID);
+  //print(laptopID);
   if(visibilityState){
     laptopColor = color(0,0,0,255);
   }else{
@@ -47,15 +48,15 @@ void drawLaptop(int laptopID, boolean visibilityState){
 float[] getLaptopPosition (int laptopID){
   float x = width/2;
   float y = 30;
-  float spacerWidth = 50;
-  float spacerHeight = 50;
+  float spacerWidth = 20;
+  float spacerHeight = 20;
   float spaceH = 0;
   if(laptopID%2==0){
     //right side
     x = spacerWidth * laptopID + x;
   }else {
     //left side
-    x = x - (spacerWidth * laptopID);
+    x = x - (spacerWidth * laptopID)- 20;
   }
 
   for(int i = 0; i<= laptopID; i++){
@@ -72,15 +73,20 @@ float[] getLaptopPosition (int laptopID){
   return postion;
   
 }
+void keyPressed(){
+ if(key=='s'){
+   sendData();
+ }
+}
 void sendData() {
   OscMessage heyMessage = new OscMessage("/schall");
   heyMessage.add("hey"); 
   oscP5.send(heyMessage, remoteLocation);
 }
 void oscEvent(OscMessage theOscMessage) {
- // String address = theOscMessage.address();
+ String address = theOscMessage.address();
   //if (!address.contains(ownNetworkAddress))
-  if(theOscMessage.checkAddrPattern("/schall_2"))
+  if(!address.contains(ownNetworkAddress) && theOscMessage.checkAddrPattern("/schall_2"))
   {
     ID = theOscMessage.get(0).intValue();
     roamWidth = theOscMessage.get(1).floatValue();

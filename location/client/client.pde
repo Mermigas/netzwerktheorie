@@ -23,7 +23,7 @@ void setup(){
 }
 void draw(){
 if (ID!=-1){
-      for(int i=0; i<=ID; i++){
+  for(int i=0; i<=ID; i++){
     if(i<ID){
       drawLaptop(i, false);
     }else{
@@ -78,15 +78,19 @@ void keyPressed(){
    sendData();
  }
 }
+
 void sendData() {
   OscMessage heyMessage = new OscMessage("/schall");
-  heyMessage.add("hey"); 
+  heyMessage.add(ownNetworkAddress); 
   oscP5.send(heyMessage, remoteLocation);
 }
 void oscEvent(OscMessage theOscMessage) {
  String address = theOscMessage.address();
   //if (!address.contains(ownNetworkAddress))
-  if(!address.contains(ownNetworkAddress) && theOscMessage.checkAddrPattern("/schall_2"))
+  if(!address.contains(ownNetworkAddress) && 
+  theOscMessage.checkAddrPattern("/schall_2") && 
+  //theOscMessage.get(4).stringValue()==ownNetworkAddress)//Variante 1: IP-Key
+  ID==-1)
   {
     ID = theOscMessage.get(0).intValue();
     roamWidth = theOscMessage.get(1).floatValue();

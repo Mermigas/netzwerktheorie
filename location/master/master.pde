@@ -30,12 +30,11 @@ void sendData() {
   sendBack.add(roomHeight);
   
   oscP5.send(sendBack, remoteLocation);
-  println("back");
 }
 
 void keyPressed() {
  if(key == 's') {
-  
+  sendData();
   println("back");
  }
 }

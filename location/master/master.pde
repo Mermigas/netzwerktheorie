@@ -34,7 +34,6 @@ void draw() {
   sendId();
 
   timer += 1/frameRate;
-  println(timer);
   //Set all ids to false
   if (timer >= 5) {
     killIds();
@@ -96,7 +95,6 @@ void oscEvent(OscMessage theOscMessage) {
     id = theOscMessage.get(0).intValue();
 
     aliveIds[id] = true;
-    println("alive" + aliveIds[id]);
   }
 }
 

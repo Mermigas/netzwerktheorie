@@ -226,7 +226,8 @@ void oscEvent(OscMessage theOscMessage) {
     ID = theOscMessage.get(1).intValue();
     roomWidth = theOscMessage.get(2).floatValue();
     roomHeight = theOscMessage.get(3).floatValue();
-    maxLaptops = theOscMessage.get(4).intValue();
+    //maxLaptops = theOscMessage.get(4).intValue();
+    maxLaptops = 20;
   }
 }
 

@@ -20,6 +20,8 @@ boolean ipMatchId = false;
 
 float timer;
 
+int numComputers = 20;
+
 void setup() {
   size(640, 420);
   //listen
@@ -47,15 +49,21 @@ void sendId() {
   //send id
   OscMessage sendIP = new OscMessage("/id");
 
-
   for (int i = 0; i < ipAdresses.size(); i++) {
     if (!aliveIds[i]) {
       sendIP.add(ipAdresses.get(i));
       sendIP.add(i);
       sendIP.add(roomWidth);
       sendIP.add(roomHeight);
+      //sendIP.add(numComputers);
       oscP5.send(sendIP, remoteLocation);
     }
+  }
+}
+
+void displayClients() {
+  for(int i = 0; i < aliveIds.length; i++) {
+    
   }
 }
 
@@ -76,6 +84,7 @@ void oscEvent(OscMessage theOscMessage) {
         ipStatus = true;
       }
     }
+    
     //If ip is not in ipAdresses (ipStatus = false) --> append current ip to ipAdresses
     if (ipStatus == false) {
       aliveIds[ipAdresses.size()] = false;

@@ -3,10 +3,16 @@ PFont light20;
 float roomWidth;
 float roomHeight;
 String ownNetworkAddress;
-boolean testMode = false;
+boolean testMode = true;
 String MODE="CONNECTING"; 
 int fade=0;
-
+float pxPerCm = 40;
+float laptopSizeW = 32;
+float laptopSizeH = 18;
+float positionLeft;
+float positionTop;
+float positionRight;
+float positionBottom;
 int ID; //eigene ID
 boolean gotID = false; // ID von Master erhalten
 int maxLaptops;
@@ -17,6 +23,9 @@ float laptopHeight = 20;
 float laptopWidth = 30;
 float roomHeightInPX;
 float roomWidthInPX;
+float laptopXInCoordinateX;
+float xtest;
+float ytest = 0;
 
 float sendHeyTime = 1; // Zeit in Sekunden, wie oft "hey" gesendet wird
 int sendHeyCounter = 0; // Counter für Hey-Nachrichten
@@ -51,7 +60,7 @@ void setup() {
   //size(800, 600, P2D);
   fullScreen();
   light = createFont("Montserrat-Light.ttf", 32);
-   light20 = createFont("Montserrat-Light.ttf", 20);
+  light20 = createFont("Montserrat-Light.ttf", 20);
   ID = -1;
   // Listen on port 12001
   oscP5 = new OscP5(this, 12001);
@@ -64,7 +73,7 @@ void setup() {
   if (testMode) {
     gotID = true;
     MODE = "CONNECTED";
-    ID=19;
+    ID=0;
     roomWidth = 20;
     roomHeight = 15;
     maxLaptops = 20;
@@ -73,20 +82,27 @@ void setup() {
 void draw() {
 
   //is ready
-  if(MODE=="READY"){
-    
-    getPositionInRoom ();
-    if (fade<255){
-     fade += 1; 
+  if (MODE=="READY") {
+    if (fade<255) {
+      fade += 1;
     }
-    println(fade);
-    background(255,255,255,fade);
+    //println(fade);
+    background(255, 255, 255, fade);
+    getPositionInRoom ();
+    xtest++;
+    ytest++;
+    
+      float[] position = mapCordinates(xtest, ytest);
+      fill(0);
+      ellipse(position[0], position[1], 100, 100);
+   
   }
-  
+
   //is connected
   if (gotID && MODE=="CONNECTED") {
     background(bg);
     drawRoom();
+    xtest = roomWidth * 100 * pxPerCm/2;
 
     //draw all laptops
     if (ID!=-1) {
@@ -99,21 +115,21 @@ void draw() {
         }
       }
     }
-    if(timerText<3){
-    //draw text
-    fill(255, 255, 255, 255);
-    textSize(20);
-    textAlign(CENTER);
-    textFont(light20);
-    text("Bitte stelle Deinen Laptop an die angegebende Position. bestätige mit Enter.", width/2, height/2);
-   timerText+=1/frameRate;
-  }
+    if (timerText<3) {
+      //draw text
+      fill(255, 255, 255, 255);
+      textSize(20);
+      textAlign(CENTER);
+      textFont(light20);
+      text("Bitte stelle Deinen Laptop an die angegebende Position. bestätige mit Enter.", width/2, height/2);
+      timerText+=1/frameRate;
+    }
     //AliveMessage 
     float d = 1/sendAliveTime;
     if (millis()>(d*1000*sendAliveCounter)) {
       sendAliveCounter++;
       sendAlive();
-      println("sendAlive");
+      //println("sendAlive");
     }
   }
 
@@ -142,7 +158,37 @@ void drawLaptop(int laptopID, boolean visibilityState) {
   drawCorners(position[0], position[1], laptopWidth, laptopHeight);
 }
 void getPositionInRoom() {
-   
+
+  float rowHeight = (roomHeight*100 * pxPerCm)/(maxLaptops/2+1);
+  float columnWidth = (roomWidth*100 * pxPerCm)/(maxLaptops+1);
+  float roomWidthPx = roomWidth * 100 * pxPerCm;
+  float roomHeightPx = roomHeight * 100 * pxPerCm;
+  float xMitteRoomPx;
+  float yMitteRoomPx;
+
+  if (ID%2==0) {
+    //right side
+    xMitteRoomPx = roomWidthPx/2 + columnWidth * int( ID/2);
+    yMitteRoomPx =  rowHeight * int( ID/2)+ height/2;
+  } else {
+    //left side
+    xMitteRoomPx = roomWidthPx/2 - columnWidth * int( ID/2);
+    yMitteRoomPx = rowHeight * int( ID/2) + height/2;
+  }
+  positionLeft = xMitteRoomPx - laptopSizeW/2*pxPerCm;
+  positionTop = yMitteRoomPx - laptopSizeH/2*pxPerCm;
+  positionRight = xMitteRoomPx + laptopSizeW/2*pxPerCm;
+  positionBottom = yMitteRoomPx + laptopSizeH/2*pxPerCm;
+  laptopXInCoordinateX = width/(positionRight-positionLeft+1);
+}
+float[] mapCordinates(float x, float y) {
+
+  float tmpx = map(x, 0, roomWidth*100*pxPerCm, -positionLeft*laptopXInCoordinateX, (-positionLeft*laptopXInCoordinateX)+(roomWidth*100*pxPerCm*laptopXInCoordinateX)); 
+  float tmpy = map(y, 0, roomHeight*100*pxPerCm, -positionTop*laptopXInCoordinateX, (-positionTop*laptopXInCoordinateX)+(roomHeight*100*pxPerCm*laptopXInCoordinateX)); 
+  float[] position = {tmpx, tmpy}; 
+  println(positionTop);
+  println("X: " + x + " X-mapping: " + tmpx + " Y: " + y + " Y-Mapping: " + tmpy);
+  return(position);
 }
 void drawCorners(float tmpX, float tmpY, float tmpW, float tmpH) {
   //oben links
@@ -170,9 +216,11 @@ void calculateSize() {
   spacerWidth = (roomWidthInPX/rows)/4;
 }
 float[] getLaptopPosition (int laptopID) {
+
   float x = width/2;
   float y = 50;
   float spaceH = 0;
+
   if (laptopID%2==0) {
     //right side
     x = spacerWidth * laptopID + x;
@@ -226,7 +274,8 @@ void oscEvent(OscMessage theOscMessage) {
     ID = theOscMessage.get(1).intValue();
     roomWidth = theOscMessage.get(2).floatValue();
     roomHeight = theOscMessage.get(3).floatValue();
-    maxLaptops = theOscMessage.get(4).intValue();
+    //maxLaptops = theOscMessage.get(4).intValue();
+    maxLaptops = 20;
   }
 }
 

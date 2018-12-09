@@ -1,9 +1,36 @@
+import processing.sound.*;
+import controlP5.*;
 import oscP5.*;
 import netP5.*;
 
 OscP5 oscP5;
 NetAddress remoteLocation;
 
+/* Controllers */
+ControlP5 cp5; //Setup Controller
+
+//All inner controller messures
+int knobR = 30;
+int knobArea = 250;
+int space_t_k = 50;
+
+//different controllers
+SqrOsc square;
+boolean squareOn = false;
+PVector sq_location = new PVector(200, 150);
+
+/* State Machine */
+int STATE = 0;
+
+
+/* Send/receive stuff sound */
+boolean senden = false;
+
+/* Extra Stuff */
+float duration_sq;
+float time = 0; //time for how long to send
+
+/* Send/receive stuff with client */
 String hey; //first hey 
 float roomWidth = 17.2; //roomWidth
 float roomHeight = 11.2; //roomHeight
@@ -18,21 +45,51 @@ boolean idStatus = false; //is the id already in aliveIds?
 
 boolean ipMatchId = false;
 
-float timer;
+float timer; //timer to kill all ids
 
 int numComputers = 20;
 
 void setup() {
   size(640, 420);
+  
+  /*** OSC ***/
   //listen
-  oscP5 = new OscP5(this, 12001);
+  oscP5 = new OscP5(this, 12000);
   //send
   remoteLocation = new NetAddress("255.255.255.255", 12001);
 
   ipAdresses = new StringList();
+  
+  /*** Controllers ***/
+  controller();
+
+  /*** Sound ***/
+  square = new SqrOsc(this);
 }
 
 void draw() {
+  background(#404040);
+  
+  /*** Interface ***/
+  //area for sending
+  rectMode(CENTER);
+  fill(0, 0);
+  stroke(#FFED5F);
+  rect(width/2, height-30, 560, 60);
+
+  //Call the waves
+  squareFunction();
+
+  //set how long Data should be send into the network
+  if (senden == true) {
+    durationAndsend(duration_sq);
+  }
+
+  if (STATE == 1) {
+    displayClients();
+  }
+  
+  /*** Communication with client ***/
   sendId();
 
   timer += 1/frameRate;
@@ -44,67 +101,45 @@ void draw() {
   }
 }
 
-//Send ip, id, room width, room height
-void sendId() {
-  //send id
-  OscMessage sendIP = new OscMessage("/id");
-
-  for (int i = 0; i < ipAdresses.size(); i++) {
-    if (!aliveIds[i]) {
-      sendIP.add(ipAdresses.get(i));
-      sendIP.add(i);
-      sendIP.add(roomWidth);
-      sendIP.add(roomHeight);
-      //sendIP.add(numComputers);
-      oscP5.send(sendIP, remoteLocation);
+//Bring state machine and tabs together
+void controlEvent(ControlEvent theControlEvent) {
+  if (theControlEvent.isTab()) {
+    if (theControlEvent.getTab().getId() == 1) {
+      STATE = 1;
+    } else {
+      STATE = 0;
     }
+  }
+
+  if (theControlEvent.getController().getName().equals("send")) {
+    senden = true;
   }
 }
 
+//Display the clients
 void displayClients() {
-  for(int i = 0; i < aliveIds.length; i++) {
-    
+  rectMode(CENTER);
+  for (int i = 0; i < 20; i++) {
+    rect(width/2, 20 + i, 40, 40);
   }
 }
 
-//listen to client
-void oscEvent(OscMessage theOscMessage) {
-
-  //Listen to hey
-  if (theOscMessage.checkAddrPattern("/hey") == true) {
-
-    ip = theOscMessage.get(0).stringValue();
-    println(ip);
-
-    //Check if current ip is already in StringList ipAdresses
-    for (int i = 0; i < ipAdresses.size(); i++) {
-      String currentId = ipAdresses.get(i);
-      //If yes (ipStatus = true) --> ip won't get in list again
-      if (ip.equals(currentId)) {
-        ipStatus = true;
-      }
-    }
-    
-    //If ip is not in ipAdresses (ipStatus = false) --> append current ip to ipAdresses
-    if (ipStatus == false) {
-      aliveIds[ipAdresses.size()] = false;
-      ipAdresses.append(ip);
-    }
-
-    //save hey
-    hey = theOscMessage.get(1).stringValue();
-    println(hey);
-
-    //Print ipAdresses
-    println(ipAdresses);
+//This function creates the duration and sends the value
+void durationAndsend(float d_value) {
+  time = time + 1/frameRate;
+  
+  //As long as time is under choosen time --> send data
+  if (time <= d_value) {
+    sendData();
   }
-
-  //Listen to alive
-  if (theOscMessage.checkAddrPattern("/alive") == true) {
-    id = theOscMessage.get(0).intValue();
-
-    aliveIds[id] = true;
+  
+  //If time is over choosen time --> set everything to default
+  if(time > d_value) {
+    time = 0;
+    senden = false;
   }
+  
+  println(time);
 }
 
 void killIds() {

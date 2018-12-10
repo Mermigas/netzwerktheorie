@@ -26,6 +26,7 @@ float roomWidthInPX;
 float laptopXInCoordinateX;
 float xtest;
 float ytest = 0;
+float gtest=100;
 
 float sendHeyTime = 1; // Zeit in Sekunden, wie oft "hey" gesendet wird
 int sendHeyCounter = 0; // Counter für Hey-Nachrichten
@@ -73,7 +74,7 @@ void setup() {
   if (testMode) {
     gotID = true;
     MODE = "CONNECTED";
-    ID=0;
+    ID=2;
     roomWidth = 20;
     roomHeight = 15;
     maxLaptops = 20;
@@ -91,10 +92,11 @@ void draw() {
     getPositionInRoom ();
     xtest++;
     ytest++;
+    gtest++;
     
-      float[] position = mapCordinates(xtest, ytest);
+      float[] position = mapCordinates(40000, 300);
       fill(0);
-      ellipse(position[0], position[1], 100, 100);
+      ellipse(position[0], position[1], gtest*10, gtest*10);
    
   }
 
@@ -172,7 +174,7 @@ void getPositionInRoom() {
     yMitteRoomPx =  rowHeight * int( ID/2)+ height/2;
   } else {
     //left side
-    xMitteRoomPx = roomWidthPx/2 - columnWidth * int( ID/2);
+    xMitteRoomPx = roomWidthPx/2 - columnWidth * (int(ID/2)+1);
     yMitteRoomPx = rowHeight * int( ID/2) + height/2;
   }
   positionLeft = xMitteRoomPx - laptopSizeW/2*pxPerCm;

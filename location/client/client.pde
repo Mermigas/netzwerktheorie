@@ -103,6 +103,7 @@ void setup() {
     SinOsc sin = new SinOsc(this);
     sound = new Sound(this);
 
+    ellipseMode(CENTER);
 }
 void draw() {
 
@@ -208,8 +209,8 @@ void oscEvent(OscMessage theOscMessage) {
     String type = theOscMessage.get(1).stringValue();
     float freq = theOscMessage.get(2).floatValue();
     float amp = theOscMessage.get(3).floatValue();
-    float time = theOscMessage.get(4).floatValue();
-    float  globalVelocity = theOscMessage.get(5).floatValue();
+    float  globalVelocity = theOscMessage.get(4).floatValue();
+    float time = theOscMessage.get(5).floatValue();
     int echoID = theOscMessage.get(6).intValue();
     drawVisualization(id, type, freq, amp, time, globalVelocity, echoID);
   }

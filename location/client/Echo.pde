@@ -50,7 +50,8 @@ class Echo {
       }
    
     println("alpha: " + alpha + " radius:" + radius);
-    float []positionnew = mapCordinates(position.x, position.y);
+    println("position: " + position.x);
+    float [] positionnew = mapCordinates(position.x, position.y);
     ellipse(positionnew[0], positionnew[1], radius, radius);
     
     

@@ -14,7 +14,7 @@ float[] getPositionInRoomByID(int tmpID) {
   } else {
     //left side
     xMitteRoomPx = roomWidthPx/2 - columnWidth * (int(tmpID/2)+1);
-    yMitteRoomPx = rowHeight * (int( ID/2)+1) + height/2;
+    yMitteRoomPx = rowHeight * int( ID/2) + height/2;
   }
   float [] position = {xMitteRoomPx, yMitteRoomPx};
   return position;

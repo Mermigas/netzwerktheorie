@@ -42,7 +42,7 @@ class Echo {
         kreisEndeCounter++;
         i = kreisEndeCounter;
       }
-    alpha = int(alpha - (i*(alphaPerS/frameRate));
+    alpha = int(alpha - (i*(alphaPerS/frameRate)));
     ellipse(position.x, position.y, radius, radius);
     }
   }

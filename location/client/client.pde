@@ -78,7 +78,7 @@ void setup() {
   //FONTS
   light = createFont("Montserrat-Light.ttf", 32);
   light20 = createFont("Montserrat-Light.ttf", 20);
-  
+
   ID = -1;
   //NETWORK
   // Listen on port 12001
@@ -97,13 +97,13 @@ void setup() {
     roomHeight = 15;
     maxLaptops = 20;
   }
-    echo = new ArrayList<Echo>();
-    
-    //SOUND
-    SinOsc sin = new SinOsc(this);
-    sound = new Sound(this);
+  echo = new ArrayList<Echo>();
 
-    ellipseMode(CENTER);
+  //SOUND
+  SinOsc sin = new SinOsc(this);
+  sound = new Sound(this);
+
+  ellipseMode(CENTER);
 }
 void draw() {
 
@@ -112,24 +112,31 @@ void draw() {
     if (fade<255) {
       fade += 1;
     }
-    //background(bg);
+    if (testMode) {
+      background(bg);
+      getPositionInRoom ();
+      float[] position = mapCordinates(40000, 300);
+      fill(0);
+      ellipse(position[0], position[1], gtest*10, gtest*10);
+    } else {
+      getPositionInRoom ();
+      background(bg);
+      for (Echo tmpEcho : echo) {
+        tmpEcho.display();
+
+        //println("disylayEcho");
+      }
+    }
+    //
     //println(fade);
     //background(255, 255, 255, fade);
-    getPositionInRoom ();
-    background(bg);
-      for (Echo tmpEcho : echo) {
-    tmpEcho.display();
-    
-    //println("disylayEcho");
-    
-  }
-    
- 
-    
-      /*float[] position = mapCordinates(40000, 300);
-      fill(0);
-      ellipse(position[0], position[1], gtest*10, gtest*10);*/
-   
+
+
+
+
+    /*float[] position = mapCordinates(40000, 300);
+     fill(0);
+     ellipse(position[0], position[1], gtest*10, gtest*10);*/
   }
 
   //is connected
@@ -211,7 +218,7 @@ void oscEvent(OscMessage theOscMessage) {
     roomHeight = theOscMessage.get(3).floatValue();
     //maxLaptops = theOscMessage.get(4).intValue();
     maxLaptops = 20;
-  }else if (theOscMessage.checkAddrPattern("/data") == true) {
+  } else if (theOscMessage.checkAddrPattern("/data") == true) {
     int id = theOscMessage.get(0).intValue();
     String type = theOscMessage.get(1).stringValue();
     float freq = theOscMessage.get(2).floatValue();

@@ -9,7 +9,7 @@ OscP5 oscP5;
 NetAddress remoteLocation;
 
 //GLOBALE VARIABLEN
-boolean testMode = false;
+boolean testMode = true;
 String MODE="CONNECTING"; 
 float roomWidth;
 float roomHeight;
@@ -92,7 +92,7 @@ void setup() {
   if (testMode) {
     gotID = true;
     MODE = "CONNECTED";
-    ID=2;
+   // ID=0;
     roomWidth = 20;
     roomHeight = 15;
     maxLaptops = 20;
@@ -114,6 +114,7 @@ void draw() {
     }
     if (testMode) {
       background(bg);
+      gtest++;
       getPositionInRoom ();
       float[] position = mapCordinates(40000, 300);
       fill(0);

@@ -2,12 +2,14 @@
 import oscP5.*;
 import netP5.*;
 
+import processing.sound.*;
+Sound sound;
 // Global instances for communication objects
 OscP5 oscP5;
 NetAddress remoteLocation;
 
 //GLOBALE VARIABLEN
-boolean testMode = true;
+boolean testMode = false;
 String MODE="CONNECTING"; 
 float roomWidth;
 float roomHeight;
@@ -95,6 +97,12 @@ void setup() {
     roomHeight = 15;
     maxLaptops = 20;
   }
+    echo = new ArrayList<Echo>();
+    
+    //SOUND
+    SinOsc sin = new SinOsc(this);
+    sound = new Sound(this);
+
 }
 void draw() {
 
@@ -202,6 +210,7 @@ void oscEvent(OscMessage theOscMessage) {
     float amp = theOscMessage.get(3).floatValue();
     float time = theOscMessage.get(4).floatValue();
     float  globalVelocity = theOscMessage.get(5).floatValue();
-    drawVisualization(id, type, freq, amp, time, globalVelocity);
+    int echoID = theOscMessage.get(6).intValue();
+    drawVisualization(id, type, freq, amp, time, globalVelocity, echoID);
   }
 }

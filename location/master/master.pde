@@ -49,6 +49,8 @@ float timer; //timer to kill all ids
 
 int numComputers = 20;
 
+int counter_sq = -1; //a counter to let client check if the data was already send
+
 void setup() {
   size(640, 420);
   
@@ -83,6 +85,7 @@ void draw() {
   //set how long Data should be send into the network
   if (senden == true) {
     durationAndsend(duration_sq);
+    
   }
 
   if (STATE == 1) {
@@ -99,6 +102,8 @@ void draw() {
     //println("ids killed");
     timer = 0;
   }
+  
+  println(counter_sq);
 }
 
 //Bring state machine and tabs together
@@ -113,6 +118,7 @@ void controlEvent(ControlEvent theControlEvent) {
 
   if (theControlEvent.getController().getName().equals("send")) {
     senden = true;
+    counter_sq++;
   }
 }
 
@@ -138,8 +144,6 @@ void durationAndsend(float d_value) {
     time = 0;
     senden = false;
   }
-  
-  println(time);
 }
 
 void killIds() {

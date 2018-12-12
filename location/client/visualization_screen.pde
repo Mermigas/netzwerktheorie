@@ -71,8 +71,5 @@ void drawVisualization (int tmpID, String tmpType, Float tmpFreq, float time, Fl
     //sin.play(tmpFreq, tmpAmp);
   }
  }
-  for (Echo tmpEcho : echo) {
-    tmpEcho.display();
-    
-  }
+
 }

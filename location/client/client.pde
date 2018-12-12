@@ -112,9 +112,18 @@ void draw() {
     if (fade<255) {
       fade += 1;
     }
+    //background(bg);
     //println(fade);
     //background(255, 255, 255, fade);
     getPositionInRoom ();
+    background(bg);
+      for (Echo tmpEcho : echo) {
+    tmpEcho.display();
+    
+    //println("disylayEcho");
+    
+  }
+    
  
     
       /*float[] position = mapCordinates(40000, 300);

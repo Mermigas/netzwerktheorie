@@ -113,15 +113,13 @@ void draw() {
       fade += 1;
     }
     //println(fade);
-    background(255, 255, 255, fade);
+    //background(255, 255, 255, fade);
     getPositionInRoom ();
-    xtest++;
-    ytest++;
-    gtest++;
+ 
     
-      float[] position = mapCordinates(40000, 300);
+      /*float[] position = mapCordinates(40000, 300);
       fill(0);
-      ellipse(position[0], position[1], gtest*10, gtest*10);
+      ellipse(position[0], position[1], gtest*10, gtest*10);*/
    
   }
 

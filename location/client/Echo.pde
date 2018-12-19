@@ -48,9 +48,10 @@ class Echo {
         //alpha = int(alpha - (i*(alphaPerS/frameRate)));
       }
 
-      println("alpha: " + alpha + " radius:" + radius);
-      println("position: " + position.x);
+      //println("alpha: " + alpha + " radius:" + radius);
+      //println("position: " + position.x);
       float [] positionnew = mapCordinates(position.x, position.y);
+      println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);
       ellipse(positionnew[0], positionnew[1], radius, radius);
     }
   }

@@ -66,12 +66,13 @@ void drawVisualization (int tmpID, String tmpType, Float tmpFreq, float time, Fl
      check = true;
    }
  }
+ println("check: " + check);
  if (!check) {
   //get postion of echo in room
   float [] position = getPositionInRoomByID(tmpID);
-  float [] positionMapped = mapCordinates(position[0], position[1]);
-  println("xEchoMapped: " + positionMapped[0] + " yEchoMapped: " + positionMapped[1]);
-  echo.add(new Echo(positionMapped[0], positionMapped[1], r, tmpFreq, tmpAmp, tmpType, time, tmpEchoID));
+  //float [] positionMapped = mapCordinates(position[0], position[1]);
+  //println("xEchoMapped: " + positionMapped[0] + " yEchoMapped: " + positionMapped[1]);
+  echo.add(new Echo(position[0], position[1], r, tmpFreq, tmpAmp, tmpType, time, tmpEchoID));
   //play sound 
   if (tmpID == ID){
     //sin.play(tmpFreq, tmpAmp);

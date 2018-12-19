@@ -16,7 +16,8 @@ float[] getPositionInRoomByID(int tmpID) {
     xMitteRoomPx = roomWidthPx/2 - columnWidth * (int(tmpID/2)+1);
     yMitteRoomPx = rowHeight * (int( tmpID/2)+1) + height/2;
   }
-   println("xMitteRoomPx: " + xMitteRoomPx + " yMitteRoomPx: " + yMitteRoomPx);
+   println("xEcho: " + xMitteRoomPx + " yEcho: " + yMitteRoomPx);
+   
   float [] position = {xMitteRoomPx, yMitteRoomPx};
   return position;
 }
@@ -38,13 +39,14 @@ void getPositionInRoom() {
     xMitteRoomPx = roomWidthPx/2 - columnWidth * (int(ID/2)+1);
     yMitteRoomPx = rowHeight * (int( ID/2)+1) + height/2;
   }
+  println("xMitteRoom: " + xMitteRoomPx + " yMitteRoom: " + yMitteRoomPx);
   positionLeft = xMitteRoomPx - laptopSizeW/2*pxPerCm;
-  println("positionLeft: " + positionLeft);
+  //println("positionLeft: " + positionLeft);
   positionTop = yMitteRoomPx - laptopSizeH/2*pxPerCm;
   positionRight = xMitteRoomPx + laptopSizeW/2*pxPerCm;
   positionBottom = yMitteRoomPx + laptopSizeH/2*pxPerCm;
   laptopXInCoordinateX = width/(positionRight-positionLeft+1);
-  println("positionRight:" +  positionRight);
+  //println("positionRight:" +  positionRight);
 }
 float[] mapCordinates(float x, float y) {
   float tmpx = map(x, 0, roomWidth*100*pxPerCm, -positionLeft*laptopXInCoordinateX, (-positionLeft*laptopXInCoordinateX)+(roomWidth*100*pxPerCm*laptopXInCoordinateX)); 
@@ -52,8 +54,8 @@ float[] mapCordinates(float x, float y) {
   float[] position = {tmpx, tmpy}; 
   float tmp1 = -positionLeft*laptopXInCoordinateX;
   float tmp2 = (-positionLeft*laptopXInCoordinateX)+(roomWidth*100*pxPerCm*laptopXInCoordinateX);
-  println("ID:" + ID + "left-border:" + tmp1 + "rightBorder: " + tmp2 );
-  println("X: " + x + " X-mapping: " + tmpx + " Y: " + y + " Y-Mapping: " + tmpy);
+  //println("ID:" + ID + "left-border:" + tmp1 + "rightBorder: " + tmp2 );
+  //println("X: " + x + " X-mapping: " + tmpx + " Y: " + y + " Y-Mapping: " + tmpy);
   return(position);
 }
 void drawVisualization (int tmpID, String tmpType, Float tmpFreq, float time, Float tmpAmp, Float tmpGlobalVelocity, int tmpEchoID) {
@@ -67,12 +69,13 @@ void drawVisualization (int tmpID, String tmpType, Float tmpFreq, float time, Fl
  if (!check) {
   //get postion of echo in room
   float [] position = getPositionInRoomByID(tmpID);
-  
-  echo.add(new Echo(position[0], position[1], r, tmpFreq, tmpAmp, tmpType, time, tmpEchoID));
+  float [] positionMapped = mapCordinates(position[0], position[1]);
+  println("xEchoMapped: " + positionMapped[0] + " yEchoMapped: " + positionMapped[1]);
+  echo.add(new Echo(positionMapped[0], positionMapped[1], r, tmpFreq, tmpAmp, tmpType, time, tmpEchoID));
   //play sound 
   if (tmpID == ID){
     //sin.play(tmpFreq, tmpAmp);
   }
  }
-println("tempID: " +tmpID);
+//println("tempID: " +tmpID);
 }

@@ -1,21 +1,22 @@
 float[] getPositionInRoomByID(int tmpID) {
   
   float rowHeight = (roomHeight*100 * pxPerCm)/(maxLaptops/2+1);
-  float columnWidth = (roomWidth*100 * pxPerCm)/(maxLaptops+1);
+  float columnWidth = (roomWidth*100 * pxPerCm)/(maxLaptops);
   float roomWidthPx = roomWidth * 100 * pxPerCm;
   float roomHeightPx = roomHeight * 100 * pxPerCm;
   float xMitteRoomPx;
   float yMitteRoomPx;
-
-  if (ID%2==0) {
+ 
+  if (tmpID%2==0) {
     //right side and first one
     xMitteRoomPx = roomWidthPx/2 + columnWidth * int( tmpID/2);
-    yMitteRoomPx =  rowHeight * int( ID/2)+ height/2;
+    yMitteRoomPx =  rowHeight * int( tmpID/2)+ height/2;
   } else {
     //left side
     xMitteRoomPx = roomWidthPx/2 - columnWidth * (int(tmpID/2)+1);
-    yMitteRoomPx = rowHeight * (int( ID/2)+1) + height/2;
+    yMitteRoomPx = rowHeight * (int( tmpID/2)+1) + height/2;
   }
+   println("xMitteRoomPx: " + xMitteRoomPx + " yMitteRoomPx: " + yMitteRoomPx);
   float [] position = {xMitteRoomPx, yMitteRoomPx};
   return position;
 }
@@ -31,13 +32,12 @@ void getPositionInRoom() {
   if (ID%2==0) {
     //right side
     xMitteRoomPx = roomWidthPx/2 + columnWidth * int( ID/2);
-    yMitteRoomPx =  rowHeight * int( ID/2)+ roomHeightPx/2;
+    yMitteRoomPx =  rowHeight * int( ID/2)+ height/2;
   } else {
     //left side
     xMitteRoomPx = roomWidthPx/2 - columnWidth * (int(ID/2)+1);
-    yMitteRoomPx = rowHeight * (int( ID/2)+1) + roomHeightPx/2;
+    yMitteRoomPx = rowHeight * (int( ID/2)+1) + height/2;
   }
-  println("xMitteRoomPx: " + xMitteRoomPx + " yMitteRoomPx: " + yMitteRoomPx);
   positionLeft = xMitteRoomPx - laptopSizeW/2*pxPerCm;
   println("positionLeft: " + positionLeft);
   positionTop = yMitteRoomPx - laptopSizeH/2*pxPerCm;

@@ -31,12 +31,13 @@ void getPositionInRoom() {
   if (ID%2==0) {
     //right side
     xMitteRoomPx = roomWidthPx/2 + columnWidth * int( ID/2);
-    yMitteRoomPx =  rowHeight * int( ID/2)+ height/2;
+    yMitteRoomPx =  rowHeight * int( ID/2)+ roomHeightPx/2;
   } else {
     //left side
     xMitteRoomPx = roomWidthPx/2 - columnWidth * (int(ID/2)+1);
-    yMitteRoomPx = rowHeight * (int( ID/2)+1) + height/2;
+    yMitteRoomPx = rowHeight * (int( ID/2)+1) + roomHeightPx/2;
   }
+  println("xMitteRoomPx: " + xMitteRoomPx + " yMitteRoomPx: " + yMitteRoomPx);
   positionLeft = xMitteRoomPx - laptopSizeW/2*pxPerCm;
   println("positionLeft: " + positionLeft);
   positionTop = yMitteRoomPx - laptopSizeH/2*pxPerCm;

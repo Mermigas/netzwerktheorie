@@ -15,8 +15,8 @@ float roomWidth;
 float roomHeight;
 int maxLaptops;
 int ID; //eigene ID
-float laptopHeight = 20;
-float laptopWidth = 30;
+float laptopHeight = 20; //Height for drawing on position Screen
+float laptopWidth = 30; //Width for drawing on position Screen
 float roomHeightInPX;
 float roomWidthInPX;
 float laptopXInCoordinateX;
@@ -78,7 +78,7 @@ void setup() {
   //FONTS
   light = createFont("Montserrat-Light.ttf", 32);
   light20 = createFont("Montserrat-Light.ttf", 20);
-  
+
   ID = -1;
   //NETWORK
   // Listen on port 12001
@@ -92,18 +92,18 @@ void setup() {
   if (testMode) {
     gotID = true;
     MODE = "CONNECTED";
-    ID=2;
+    ID=0;
     roomWidth = 20;
     roomHeight = 15;
     maxLaptops = 20;
   }
-    echo = new ArrayList<Echo>();
-    
-    //SOUND
-    SinOsc sin = new SinOsc(this);
-    sound = new Sound(this);
+  echo = new ArrayList<Echo>();
 
-    ellipseMode(CENTER);
+  //SOUND
+  SinOsc sin = new SinOsc(this);
+  sound = new Sound(this);
+
+  ellipseMode(CENTER);
 }
 void draw() {
 
@@ -112,17 +112,37 @@ void draw() {
     if (fade<255) {
       fade += 1;
     }
-    //println(fade);
-    background(255, 255, 255, fade);
-    getPositionInRoom ();
-    xtest++;
-    ytest++;
-    gtest++;
-    
+    if (testMode) {
+      ID = 3;
+      background(bg);
+      gtest++;
+      getPositionInRoom ();
       float[] position = mapCordinates(40000, 300);
-      fill(0);
-      ellipse(position[0], position[1], gtest*10, gtest*10);
-   
+      //fill(0);
+      //ellipse(position[0], position[1], gtest*10, gtest*10);
+      for (Echo tmpEcho : echo) {
+        tmpEcho.display();
+      }
+    } else {
+      //ID=2;
+      getPositionInRoom ();
+      background(bg);
+      for (Echo tmpEcho : echo) {
+        tmpEcho.display();
+
+        //println("disylayEcho");
+      }
+    }
+    //
+    //println(fade);
+    //background(255, 255, 255, fade);
+
+
+
+
+    /*float[] position = mapCordinates(40000, 300);
+     fill(0);
+     ellipse(position[0], position[1], gtest*10, gtest*10);*/
   }
 
   //is connected
@@ -202,9 +222,9 @@ void oscEvent(OscMessage theOscMessage) {
     ID = theOscMessage.get(1).intValue();
     roomWidth = theOscMessage.get(2).floatValue();
     roomHeight = theOscMessage.get(3).floatValue();
-    //maxLaptops = theOscMessage.get(4).intValue();
-    maxLaptops = 20;
-  }else if (theOscMessage.checkAddrPattern("/data") == true) {
+    maxLaptops = theOscMessage.get(4).intValue();
+    //maxLaptops = 20;
+  } else if (theOscMessage.checkAddrPattern("/data") == true) {
     int id = theOscMessage.get(0).intValue();
     String type = theOscMessage.get(1).stringValue();
     float freq = theOscMessage.get(2).floatValue();

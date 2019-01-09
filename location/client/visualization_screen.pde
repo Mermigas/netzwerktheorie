@@ -58,6 +58,10 @@ float[] mapCordinates(float x, float y) {
   //println("X: " + x + " X-mapping: " + tmpx + " Y: " + y + " Y-Mapping: " + tmpy);
   return(position);
 }
+float mapSize(float size) {
+  float newSize = size * width/(laptopSizeW * pxPerCm);
+  return(newSize);
+}
 void drawVisualization (int tmpID, String tmpType, Float tmpFreq, float time, Float tmpAmp, Float tmpGlobalVelocity, int tmpEchoID) {
   
   boolean check = false;

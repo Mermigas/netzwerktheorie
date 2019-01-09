@@ -51,8 +51,9 @@ class Echo {
       //println("alpha: " + alpha + " radius:" + radius);
       //println("position: " + position.x);
       float [] positionnew = mapCordinates(position.x, position.y);
+      float size = mapSize(radius);
       println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);
-      ellipse(positionnew[0], positionnew[1], radius, radius);
+      ellipse(positionnew[0], positionnew[1], size, size);
     }
   }
 }

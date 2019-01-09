@@ -15,8 +15,8 @@ float roomWidth;
 float roomHeight;
 int maxLaptops;
 int ID; //eigene ID
-float laptopHeight = 20;
-float laptopWidth = 30;
+float laptopHeight = 20; //Height for drawing on position Screen
+float laptopWidth = 30; //Width for drawing on position Screen
 float roomHeightInPX;
 float roomWidthInPX;
 float laptopXInCoordinateX;
@@ -222,8 +222,8 @@ void oscEvent(OscMessage theOscMessage) {
     ID = theOscMessage.get(1).intValue();
     roomWidth = theOscMessage.get(2).floatValue();
     roomHeight = theOscMessage.get(3).floatValue();
-    //maxLaptops = theOscMessage.get(4).intValue();
-    maxLaptops = 20;
+    maxLaptops = theOscMessage.get(4).intValue();
+    //maxLaptops = 20;
   } else if (theOscMessage.checkAddrPattern("/data") == true) {
     int id = theOscMessage.get(0).intValue();
     String type = theOscMessage.get(1).stringValue();

@@ -34,7 +34,7 @@ class Echo {
     if (alpha>0) {
       alpha = int(alpha - alphaPerS/frameRate);
     }
-    //alpha =255;
+    alpha =255;
     float timeBetween = map (freq, 0, 5000, 0, frameRate);
     strokeWeight(int(10*amp));
     stroke(255, 255, 255, alpha);
@@ -51,7 +51,10 @@ class Echo {
       //println("alpha: " + alpha + " radius:" + radius);
       //println("position: " + position.x);
       float [] positionnew = mapCordinates(position.x, position.y);
+     
       float size = mapSize(radius);
+       print("Old Size:" + radius + "; New Size: " + size + ";  with: " + width);
+      //float size = radius;
       println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);
       ellipse(positionnew[0], positionnew[1], size, size);
     }

@@ -1,26 +1,19 @@
-void drawRoom () {
-  stroke(255);
-  fill(bg);
-  if (width/roomWidth<height/roomHeight) {
-    //Breite ist einschränkend
-    roomHeightInPX = width/roomWidth*roomHeight;
-    roomWidthInPX = width-marginHeight;
-    rect(25, 25, roomWidthInPX, roomHeightInPX );
+//Main function to draw the laptops
+void drawLaptop(int laptopID, boolean visibilityState) {
+  color laptopColor;
+  //print(laptopID);
+  if (visibilityState) {
+    counterAnimateLaptop += 0.05;
+    int lv = int(map(sin(counterAnimateLaptop), -1, 1, 30, 255));
+    laptopColor = color(255, 0, 0, lv);
   } else {
-    //Höhe ist einschränkend
-    roomWidthInPX = height/roomHeight*roomWidth;
-    roomHeightInPX = height-marginHeight;
-    rect(width/2, height/2, roomWidthInPX, roomHeightInPX);
+    laptopColor = color(255, 255, 255, 100);
   }
+  float[] position = getLaptopPosition(laptopID);
+  stroke(laptopColor);
+  drawCorners(position[0], position[1], laptopWidth, laptopHeight);
 }
-void calculateSize() {
-  int rows = maxLaptops/2 +1;
-  float tmpHeight = (roomHeightInPX)/rows;
-  spacerHeight = tmpHeight;
-  laptopHeight = tmpHeight* 0.6;
-  laptopWidth = laptopHeight * 1.3;
-  spacerWidth = (roomWidthInPX/rows)/4;
-}
+
 void drawCorners(float tmpX, float tmpY, float tmpW, float tmpH) {
   //oben links
   line(tmpX-tmpW/2, tmpY-tmpH/2, tmpX-tmpW/2 + tmpW/8, tmpY-tmpH/2);
@@ -37,20 +30,6 @@ void drawCorners(float tmpX, float tmpY, float tmpW, float tmpH) {
   //untenrechts
   line(tmpX+tmpW/2, tmpY+tmpH/2, tmpX+tmpW/2 - tmpW/8, tmpY+tmpH/2);
   line(tmpX+tmpW/2, tmpY+tmpH/2, tmpX+tmpW/2, tmpY+tmpH/2 -tmpH/8);
-}
-void drawLaptop(int laptopID, boolean visibilityState) {
-  color laptopColor;
-  //print(laptopID);
-  if (visibilityState) {
-    counterAnimateLaptop += 0.05;
-    int lv = int(map(sin(counterAnimateLaptop), -1, 1, 30, 255));
-    laptopColor = color(255, 0, 0, lv);
-  } else {
-    laptopColor = color(255, 255, 255, 100);
-  }
-  float[] position = getLaptopPosition(laptopID);
-  stroke(laptopColor);
-  drawCorners(position[0], position[1], laptopWidth, laptopHeight);
 }
 
 float[] getLaptopPosition (int laptopID) {

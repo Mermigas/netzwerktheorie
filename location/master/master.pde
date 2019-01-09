@@ -9,6 +9,8 @@ NetAddress remoteLocation;
 /* Controllers */
 ControlP5 cp5; //Setup Controller
 
+Toggle toggle_1;
+
 //All inner controller messures
 int knobR = 30;
 int knobArea = 250;
@@ -32,8 +34,8 @@ float time = 0; //time for how long to send
 
 /* Send/receive stuff with client */
 String hey; //first hey 
-float roomWidth = 17.2; //roomWidth
-float roomHeight = 11.2; //roomHeight
+float roomWidth = 5; //roomWidth
+float roomHeight = 5; //roomHeight
 
 String ip; //to handle current ipAdress
 StringList ipAdresses; //List of all ip Adresses
@@ -50,13 +52,22 @@ float timer; //timer to kill all ids
 int numComputers = 20;
 
 int counter_sq = -1; //a counter to let client check if the data was already send
+boolean isOver = false;
+
+//draw screens
+float spacerWidth = 20;
+float spacerHeight = 30;
+float counterAnimateLaptop;
+float laptopHeight = 20;
+float laptopWidth = 30;
 
 void setup() {
   size(640, 420);
+  //fullScreen();
   
   /*** OSC ***/
   //listen
-  oscP5 = new OscP5(this, 12000);
+  oscP5 = new OscP5(this, 12001);
   //send
   remoteLocation = new NetAddress("255.255.255.255", 12001);
 
@@ -103,7 +114,8 @@ void draw() {
     timer = 0;
   }
   
-  println(counter_sq);
+  turnOff();
+  
 }
 
 //Bring state machine and tabs together
@@ -125,8 +137,8 @@ void controlEvent(ControlEvent theControlEvent) {
 //Display the clients
 void displayClients() {
   rectMode(CENTER);
-  for (int i = 0; i < 20; i++) {
-    rect(width/2, 20 + i, 40, 40);
+  for (int i = 0; i < ipAdresses.size(); i++) {
+    drawLaptop(i, true);
   }
 }
 
@@ -136,6 +148,7 @@ void durationAndsend(float d_value) {
   
   //As long as time is under choosen time --> send data
   if (time <= d_value) {
+    isOver = false;
     sendData();
   }
   
@@ -143,6 +156,7 @@ void durationAndsend(float d_value) {
   if(time > d_value) {
     time = 0;
     senden = false;
+    isOver = true;
   }
 }
 

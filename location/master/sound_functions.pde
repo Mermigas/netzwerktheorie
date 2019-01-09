@@ -3,6 +3,7 @@
 //Function to turn on/off squarewave
 void sq_OnOff(boolean on) {
   if (on == true) {
+    isOver = false;
     square.play();
     squareOn = true;
   } else {
@@ -27,4 +28,11 @@ float[] squareFunction() {
   duration_sq = durationV;
 
   return array;
+}
+
+//Turn off toggle when time is over (PLEASE MAKE IT CLEAN WHEN YOU HAVE TIME)
+void turnOff() {
+ if(toggle_1.getState() == true && isOver == true) {
+   toggle_1.setState(false);
+ }
 }

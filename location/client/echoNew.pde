@@ -11,7 +11,8 @@
   int particlesPerRound = 60;
   float timer = 0;
   float counter = 1;
-
+ //echo.add(new EchoSystem(position[0], position[1], tmpFreq, r, tmpAmp, tmpType, time, tmpEchoID));
+ 
   EchoSystem(float tmpX, float tmpY, float tmpFreq, float tmpradius, float tmpAmp, String tmpType, float tmpTime, int tmpEchoID) {
     origin = new PVector(tmpX, tmpY);
     particles = new ArrayList<EchoParticle>();
@@ -28,7 +29,8 @@
 
   void addParticle() {
      for (int i=0; i<particlesPerRound; i++) {
-      particles.add(new EchoParticle(origin, i, particlesPerRound, radius, lifetime, oLifetime));
+      
+       particles.add(new EchoParticle(origin, i, particlesPerRound, radius, lifetime, oLifetime));
   }
     
   }
@@ -40,6 +42,7 @@
       }
     }
   void run() {
+    
     timer += (1/frameRate) * timeController;
     lifetime -= (1/frameRate) * timeController;
     oLifetime -= (1/frameRate) * timeController;
@@ -114,7 +117,7 @@ class EchoParticle {
     //velocity = velocity.mult(0.5);
     checkForEnd();
     position.add(velocity);
-    println(velocity);
+    //println(velocity);
     
     lifetime -= (1/frameRate) * timeController;
     oLifetime -= (1/frameRate) * timeController;
@@ -129,12 +132,14 @@ class EchoParticle {
     stroke(alpha);
     fill(alpha);
    //fill(255);
-
+println("XPositionXAlt: " + position.x + "positionYAlt: " + position.y);
     float newSize = mapSize(radius);
-   // float newSize = radius;
-   // float [] positionnew = {position.x, position.y};
+    //float newSize = radius;
+    println("radius: " + radius + "newSize: " + newSize);
+    //float [] positionnew = {position.x, position.y};
     float [] positionnew = mapCordinates(position.x, position.y);
-     
+ println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);
+          
     ellipse(positionnew[0], positionnew[1], newSize, newSize);
   }
 

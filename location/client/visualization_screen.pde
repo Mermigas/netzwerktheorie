@@ -16,7 +16,7 @@ float[] getPositionInRoomByID(int tmpID) {
     xMitteRoomPx = roomWidthPx/2 - columnWidth * (int(tmpID/2)+1);
     yMitteRoomPx = rowHeight * (int( tmpID/2)+1) + height/2;
   }
-   println("xEcho: " + xMitteRoomPx + " yEcho: " + yMitteRoomPx);
+   //println("xEcho: " + xMitteRoomPx + " yEcho: " + yMitteRoomPx);
    
   float [] position = {xMitteRoomPx, yMitteRoomPx};
   return position;
@@ -39,7 +39,7 @@ void getPositionInRoom() {
     xMitteRoomPx = roomWidthPx/2 - columnWidth * (int(ID/2)+1);
     yMitteRoomPx = rowHeight * (int( ID/2)+1) + height/2;
   }
-  println("xMitteRoom: " + xMitteRoomPx + " yMitteRoom: " + yMitteRoomPx);
+  //println("xMitteRoom: " + xMitteRoomPx + " yMitteRoom: " + yMitteRoomPx);
   positionLeft = xMitteRoomPx - laptopSizeW/2*pxPerCm;
   //println("positionLeft: " + positionLeft);
   positionTop = yMitteRoomPx - laptopSizeH/2*pxPerCm;
@@ -70,13 +70,15 @@ void drawVisualization (int tmpID, String tmpType, Float tmpFreq, float time, Fl
      check = true;
    }
  }
+// check = false;
  println("check: " + check);
  if (!check) {
   //get postion of echo in room
   float [] position = getPositionInRoomByID(tmpID);
   //float [] positionMapped = mapCordinates(position[0], position[1]);
-  //println("xEchoMapped: " + positionMapped[0] + " yEchoMapped: " + positionMapped[1]);
-  echo.add(new EchoSystem(position[0], position[1], r, tmpFreq, tmpAmp, tmpType, time, tmpEchoID));
+  println("xEchoMapped: " + position[0] + " yEchoMapped: " + position[1]);
+  println("add a new system");
+  echo.add(new EchoSystem(position[0], position[1], tmpFreq, r, tmpAmp, tmpType, time, tmpEchoID));
   //play sound 
   if (tmpID == ID){
     //sin.play(tmpFreq, tmpAmp);

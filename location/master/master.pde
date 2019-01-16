@@ -73,7 +73,7 @@ void setup() {
   //listen
   oscP5 = new OscP5(this, 12001);
   //send
-  remoteLocation = new NetAddress("255.255.255.255", 12001);
+  remoteLocation = new NetAddress("255.255.255.255", 12000);
 
   ipAdresses = new StringList();
 

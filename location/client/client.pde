@@ -74,7 +74,7 @@ float ytest = 0;
 float gtest=100;
 
 void setup() {
- // fullScreen();
+  //fullScreen();
  size(800,600);
   //FONTS
   light = createFont("Montserrat-Light.ttf", 32);
@@ -83,8 +83,8 @@ void setup() {
   ID = -1;
   //NETWORK
   // Listen on port 12001
-  oscP5 = new OscP5(this, 12001);
-  remoteLocation = new NetAddress("255.255.255.255", 12000);
+  oscP5 = new OscP5(this, 12000);
+  remoteLocation = new NetAddress("255.255.255.255", 12001);
   ownNetworkAddress = NetInfo.getHostAddress();
   rectMode(CENTER);
   smooth();
@@ -234,5 +234,6 @@ void oscEvent(OscMessage theOscMessage) {
     float time = theOscMessage.get(5).floatValue();
     int echoID = theOscMessage.get(6).intValue();
     drawVisualization(id, type, freq, amp, time, globalVelocity, echoID);
+    println("drawVisu");
   }
 }

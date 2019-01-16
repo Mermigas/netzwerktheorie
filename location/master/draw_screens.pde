@@ -1,17 +1,25 @@
 //Main function to draw the laptops
-void drawLaptop(int laptopID, boolean visibilityState) {
-  color laptopColor;
+void drawLaptop(int laptopID, boolean visibilityState, color laptopColor) {
   //print(laptopID);
-  if (visibilityState) {
-    counterAnimateLaptop += 0.05;
-    int lv = int(map(sin(counterAnimateLaptop), -1, 1, 30, 255));
-    laptopColor = color(255, 0, 0, lv);
-  } else {
-    laptopColor = color(255, 255, 255, 100);
-  }
+  //if (visibilityState) {
+  //  counterAnimateLaptop += 0.05;
+  //  int lv = int(map(sin(counterAnimateLaptop), -1, 1, 30, 255));
+  //  laptopColor = color(255, 0, 0, lv);
+  //} else {
+  //  laptopColor = color(255, 255, 255, 100);
+  //}
   float[] position = getLaptopPosition(laptopID);
   stroke(laptopColor);
-  drawCorners(position[0], position[1], laptopWidth, laptopHeight);
+  rect(position[0], position[1], laptopWidth, laptopHeight);
+
+
+  if (mouseX >= position[0] - laptopWidth/2 && mouseX <= position[0] + laptopWidth/2 && mouseY >= position[1] - laptopHeight/2 && mouseY <= position[1] + laptopHeight/2) {
+    detect = true;
+  } else {
+    detect = false;
+  }
+  
+  //drawCorners(position[0], position[1], laptopWidth, laptopHeight);
 }
 
 void drawCorners(float tmpX, float tmpY, float tmpW, float tmpH) {

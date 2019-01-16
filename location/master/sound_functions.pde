@@ -13,10 +13,6 @@ void sq_OnOff(boolean on) {
 }
 
 float[] squareFunction() {
-  fill(255);
-  textAlign(LEFT);
-  textSize(18);
-  text("Squarewave", sq_location.x, sq_location.y);
 
   float freqV = cp5.getController("sq_freq").getValue();
   float ampV = cp5.getController("sq_amp").getValue();

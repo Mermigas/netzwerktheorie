@@ -97,4 +97,7 @@ void controller() {
     .setColorLabel(#ffffff)
     .setColorValue(#ffffff);
     ;
+    
+    cp5.getController("send").moveTo("global");
+    cp5.getController("global_velocity").moveTo("global");
 }

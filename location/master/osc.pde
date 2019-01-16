@@ -9,7 +9,7 @@ void sendId() {
       sendIP.add(i); //#1
       sendIP.add(roomWidth); //#2
       sendIP.add(roomHeight); //#3
-      //sendIP.add(numComputers); //#4
+      sendIP.add(numComputers); //#4
       oscP5.send(sendIP, remoteLocation);
     }
   }
@@ -19,7 +19,7 @@ void sendId() {
 void sendData() {
   OscMessage sendData = new OscMessage("/data");
   if (squareOn == true) {
-    sendData.add(0); //The id to which you should send it #0
+    sendData.add(adressedId); //The id to which you should send it #0
     sendData.add("squarewave"); //is square active? #1
     sendData.add(squareFunction()[0]); //send frequency of square #2
     sendData.add(squareFunction()[1]); //send amp of square #3

@@ -65,7 +65,7 @@ float mapSize(float size) {
 void drawVisualization (int tmpID, String tmpType, Float tmpFreq, float time, Float tmpAmp, Float tmpGlobalVelocity, int tmpEchoID) {
   
   boolean check = false;
- for (Echo tmpEcho : echo) {
+ for (EchoSystem tmpEcho : echo) {
    if(tmpEcho.echoID == tmpEchoID) {
      check = true;
    }
@@ -76,7 +76,7 @@ void drawVisualization (int tmpID, String tmpType, Float tmpFreq, float time, Fl
   float [] position = getPositionInRoomByID(tmpID);
   //float [] positionMapped = mapCordinates(position[0], position[1]);
   //println("xEchoMapped: " + positionMapped[0] + " yEchoMapped: " + positionMapped[1]);
-  echo.add(new Echo(position[0], position[1], r, tmpFreq, tmpAmp, tmpType, time, tmpEchoID));
+  echo.add(new EchoSystem(position[0], position[1], r, tmpFreq, tmpAmp, tmpType, time, tmpEchoID));
   //play sound 
   if (tmpID == ID){
     //sin.play(tmpFreq, tmpAmp);

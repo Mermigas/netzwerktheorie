@@ -7,6 +7,7 @@ class Echo {
   float freq, amp;
   int echoID;
   int counter;
+  
   int kreisEndeCounter;
   float timeStart = millis();
   float timeEnde;
@@ -20,6 +21,7 @@ class Echo {
     amp = tmpAmp;
     echoID = tmpEchoID;
     timeEnde = timeStart + tmpTime*1000;
+    
   }
 
   void move() {

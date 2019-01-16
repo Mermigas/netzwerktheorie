@@ -15,12 +15,12 @@ float roomWidth;
 float roomHeight;
 int maxLaptops;
 int ID; //eigene ID
-float laptopHeight = 20; //Height for drawing on position Screen
-float laptopWidth = 30; //Width for drawing on position Screen
+float laptopHeight = 20;
+float laptopWidth = 30;
 float roomHeightInPX;
 float roomWidthInPX;
 float laptopXInCoordinateX;
-
+float timeController = 1;
 
 //NETWORK
 String ownNetworkAddress;
@@ -35,7 +35,7 @@ PFont light;
 PFont light20;
 
 //FOR VISUALIZATION
-ArrayList<Echo> echo;
+ArrayList<EchoSystem> echo;
 float pxPerCm = 40;
 float laptopSizeW = 32;
 float laptopSizeH = 18;
@@ -74,7 +74,8 @@ float ytest = 0;
 float gtest=100;
 
 void setup() {
-  fullScreen();
+ // fullScreen();
+ size(800,600);
   //FONTS
   light = createFont("Montserrat-Light.ttf", 32);
   light20 = createFont("Montserrat-Light.ttf", 20);
@@ -83,7 +84,7 @@ void setup() {
   //NETWORK
   // Listen on port 12001
   oscP5 = new OscP5(this, 12001);
-  remoteLocation = new NetAddress("255.255.255.255", 12001);
+  remoteLocation = new NetAddress("255.255.255.255", 12000);
   ownNetworkAddress = NetInfo.getHostAddress();
   rectMode(CENTER);
   smooth();
@@ -97,7 +98,7 @@ void setup() {
     roomHeight = 15;
     maxLaptops = 20;
   }
-  echo = new ArrayList<Echo>();
+  echo = new ArrayList<EchoSystem>();
 
   //SOUND
   SinOsc sin = new SinOsc(this);
@@ -120,18 +121,18 @@ void draw() {
       float[] position = mapCordinates(40000, 300);
       //fill(0);
       //ellipse(position[0], position[1], gtest*10, gtest*10);
-      for (Echo tmpEcho : echo) {
-        tmpEcho.display();
-      }
+      
     } else {
       //ID=2;
       getPositionInRoom ();
       background(bg);
-      for (Echo tmpEcho : echo) {
-        tmpEcho.display();
-
-        //println("disylayEcho");
+      for (int i = echo.size()-1; i >= 0; i--) {
+      EchoSystem p = echo.get(i);
+      p.run();
+      if (p.isDead()) {
+        echo.remove(i);
       }
+    }
     }
     //
     //println(fade);
@@ -213,7 +214,7 @@ void oscEvent(OscMessage theOscMessage) {
   String address = theOscMessage.address();
   if (
     !gotID && 
-    !address.contains(ownNetworkAddress) && 
+    //!address.contains(ownNetworkAddress) && 
     theOscMessage.checkAddrPattern("/id") &&
     theOscMessage.get(0).stringValue().equals(ownNetworkAddress))
   {

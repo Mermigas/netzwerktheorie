@@ -53,6 +53,7 @@
      counter++;
      if(oLifetime>0) {
        addParticle();
+       println(counter);
      }
     }
     for (int i = particles.size()-1; i >= 0; i--) {
@@ -114,6 +115,11 @@ class EchoParticle {
   void update() {
     //velocity.add(acceleration);
     velocity = velocity.mult(1.02);
+    
+    //velocity.x = mapSize(velocity.x);
+    //velocity.y = mapSize(velocity.y);
+     velocity.x *= 1.45;
+     velocity.y *= 1.3;
     //velocity = velocity.mult(0.5);
     checkForEnd();
     position.add(velocity);
@@ -132,13 +138,14 @@ class EchoParticle {
     stroke(alpha);
     fill(alpha);
    //fill(255);
-println("XPositionXAlt: " + position.x + "positionYAlt: " + position.y);
-    float newSize = mapSize(radius);
-    //float newSize = radius;
+//println("XPositionXAlt: " + position.x + "positionYAlt: " + position.y);
+    //float newSize = mapSize(radius);
+    //float newSize = radius;+
+    float newSize = 10;
     println("radius: " + radius + "newSize: " + newSize);
     //float [] positionnew = {position.x, position.y};
     float [] positionnew = mapCordinates(position.x, position.y);
- println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);
+ //println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);
           
     ellipse(positionnew[0], positionnew[1], newSize, newSize);
   }

@@ -77,8 +77,8 @@ float ytest = 0;
 float gtest=100;
 
 void setup() {
-  //fullScreen();
- size(800,600);
+  fullScreen();
+ //size(800,600);
   //FONTS
   light = createFont("Montserrat-Light.ttf", 32);
   light20 = createFont("Montserrat-Light.ttf", 20);
@@ -87,7 +87,7 @@ void setup() {
   //NETWORK
   // Listen on port 12001
   oscP5 = new OscP5(this, 12000);
-  remoteLocation = new NetAddress("255.255.255.255", 12001);
+  remoteLocation = new NetAddress("255.255.255.255", 12000);
   ownNetworkAddress = NetInfo.getHostAddress();
   rectMode(CENTER);
   smooth();

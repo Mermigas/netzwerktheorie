@@ -8,7 +8,7 @@
   float radius;
   float oLifetime;
   float timeAfter;
-  int particlesPerRound = 60;
+  int particlesPerRound = 100;
   float timer = 0;
   float counter = 1;
  //echo.add(new EchoSystem(position[0], position[1], tmpFreq, r, tmpAmp, tmpType, time, tmpEchoID));
@@ -105,11 +105,11 @@ class EchoParticle {
  // float roomHeightInPX = height;
   //--------- end 
   
-    if ((position.x + radius > roomWidthInPX) || (position.x - radius < 0)) {
+    if ((position.x + radius > globalRoomWidthInPx) || (position.x - radius < 0)) {
       velocity.x = velocity.x * - 1;
       radius *= 0.8;
     }
-    if ((position.y + radius > roomHeightInPX) || (position.y - radius < 0)) {
+    if ((position.y + radius > globalRoomHeightInPx) || (position.y - radius < 0)) {
       velocity.y = velocity.y * - 1;
     } 
     

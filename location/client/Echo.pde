@@ -54,7 +54,7 @@ class Echo {
       //println("position: " + position.x);
       float [] positionnew = mapCordinates(position.x, position.y);
      
-      float size = mapSize(radius);
+      float size = mapSizeW(radius);
        print("Old Size:" + radius + "; New Size: " + size + ";  with: " + width);
       //float size = radius;
       println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);

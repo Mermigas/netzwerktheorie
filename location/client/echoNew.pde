@@ -20,6 +20,8 @@
     amp = tmpAmp;
     echoID = tmpEchoID;
     radius = tmpAmp * tmpradius;
+    println("tmpAmp: " + tmpAmp);
+     println("init radius: " + tmpradius + " init2: " + radius);
     particlesPerRound *=  amp;
     oLifetime = tmpTime;
     timeAfter = 3 * (0.5 * tmpAmp);
@@ -81,6 +83,7 @@ class EchoParticle {
   EchoParticle(PVector l, float num, float maxNum, float tmpRadius, float tmpLifetime, float tmpOLifetime) {
     //acceleration = new PVector(1.0, 1.00);
      velocity = new PVector(sin(map(num, 0, maxNum, 0, 2*PI)), cos(map(num, 0, maxNum, 0, 2*PI)));
+    
     position = l.copy();
     radius = tmpRadius;
     lifetime = tmpLifetime;
@@ -114,14 +117,16 @@ class EchoParticle {
   // Method to update position
   void update() {
     //velocity.add(acceleration);
-    velocity = velocity.mult(1.02);
+    //velocity = velocity.mult(1.2);
+    velocity.x *=  1.1;
+    velocity.y *= 1.1;
     
     //velocity.x = mapSize(velocity.x);
     //velocity.y = mapSize(velocity.y);
-     velocity.x *= 1.45;
-     velocity.y *= 1.3;
+    // velocity.x *= 1.45;
+    // velocity.y *= 1.3;
     //velocity = velocity.mult(0.5);
-    checkForEnd();
+    //checkForEnd();
     position.add(velocity);
     //println(velocity);
     
@@ -139,10 +144,10 @@ class EchoParticle {
     fill(alpha);
    //fill(255);
 //println("XPositionXAlt: " + position.x + "positionYAlt: " + position.y);
-    //float newSize = mapSize(radius);
-    //float newSize = radius;+
-    float newSize = 10;
-    println("radius: " + radius + "newSize: " + newSize);
+    float newSize = mapSizeW(radius);
+    //float newSize = radius;
+    //float newSize = 10;
+   // println("radius: " + radius + "newSize: " + newSize + "int: " + int(newSize));
     //float [] positionnew = {position.x, position.y};
     float [] positionnew = mapCordinates(position.x, position.y);
  //println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);

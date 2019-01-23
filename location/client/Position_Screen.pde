@@ -5,6 +5,7 @@ void drawRoom () {
     //Breite ist einschränkend
     roomHeightInPX = width/roomWidth*roomHeight;
     roomWidthInPX = width-marginHeight;
+    
     rect(25, 25, roomWidthInPX, roomHeightInPX );
   } else {
     //Höhe ist einschränkend

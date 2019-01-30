@@ -10,16 +10,33 @@ NetAddress remoteLocation;
 ControlP5 cp5; //Setup Controller
 
 Toggle toggle_1;
+Toggle toggle_2;
+Toggle toggle_3;
 
 //All inner controller messures
 int knobR = 30;
-int knobArea = 250;
-int space_t_k = 50;
+int space_t_k = 60;
+int space_k_k = 20;
+int buttonS_w = 40;
+int controlArea = knobR*6+space_k_k*2;
 
 //different controllers
 SqrOsc square;
 boolean squareOn = false;
-PVector sq_location = new PVector(200, 150);
+PVector sq_location = new PVector(180, 300);
+float duration_sq;
+
+SawOsc saw;
+boolean sawOn = false;
+PVector sw_location = new PVector(470, 300);
+float duration_sw;
+
+SinOsc sin;
+boolean sinOn = false;
+PVector sin_location = new PVector(760, 300);
+float duration_sin;
+
+int echoCounter = -1; //counts how often the waves were sent
 
 /* State Machine */
 int STATE = 0;
@@ -28,20 +45,19 @@ int STATE = 0;
 boolean senden = false;
 
 /* Extra Stuff */
-float duration_sq;
 float time = 0; //time for how long to send
 
 /* Send/receive stuff with client */
 String hey; //first hey 
-float roomWidth = 2; //roomWidth
-float roomHeight = 2; //roomHeight
+float roomWidth = 3; //roomWidth
+float roomHeight = 4; //roomHeight
 
 String ip; //to handle current ipAdress
 StringList ipAdresses; //List of all ip Adresses
 boolean ipStatus = false; //is the ip already in ipAdresses?
 
 int id;
-int adressedId; //the id that gets send, so the computer know if its addressed
+int adressedId = 0; //the id that gets send, so the computer know if its addressed
 boolean[] aliveIds = new boolean[100];
 boolean idStatus = false; //is the id already in aliveIds?
 
@@ -49,9 +65,8 @@ boolean ipMatchId = false;
 
 float timer; //timer to kill all ids
 
-int numComputers = 6;
+int numComputers = 12;
 
-int counter_sq = -1; //a counter to let client check if the data was already send
 boolean isOver = false;
 
 //draw screens
@@ -63,25 +78,43 @@ float laptopWidth = 30;
 boolean detect = false;
 
 //laptop thumnails
-int colorThumbnails = color(255,0,0);
+int colorThumbnails = color(255, 0, 0);
+boolean displayState = false;
+
+//fonts
+PFont pfont_l;
+PFont pfont_r;
+PFont pfont_b;
+ControlFont font_l;
+ControlFont font_r;
+ControlFont font_b;
 
 void setup() {
-  size(640, 420);
+  //size(640, 420);
+  size(1200, 850);
   //fullScreen();
 
   /*** OSC ***/
   //listen
-  oscP5 = new OscP5(this, 12001);
+  oscP5 = new OscP5(this, 12000);
   //send
-  remoteLocation = new NetAddress("255.255.255.255", 12001);
+  remoteLocation = new NetAddress("255.255.255.255", 12000);
 
   ipAdresses = new StringList();
 
-  /*** Controllers ***/
+  /*** Controllers controlP5 ***/
   controller();
+  sq_Controller();
+  sw_Controller();
+  sin_Controller();
 
   /*** Sound ***/
   square = new SqrOsc(this);
+  saw = new SawOsc(this);
+  sin = new SinOsc(this);
+
+  /*** font ***/
+  textFont(pfont_r);
 }
 
 void draw() {
@@ -96,23 +129,32 @@ void draw() {
 
   //Call the waves
   squareFunction();
+  sawFunction();
+  sineFunction();
 
   //set how long Data should be send into the network
   if (senden == true) {
     durationAndsend(duration_sq);
+    durationAndsend(duration_sw);
+    durationAndsend(duration_sin);
   }
 
-  if (STATE == 0) {
-    //Text for the controllers
-    fill(255);
-    textAlign(LEFT);
-    textSize(18);
-    text("Squarewave", sq_location.x, sq_location.y);
-    
-    
-  } else if (STATE == 1) {
-    displayClients();
-  }
+  //Text for the controllers
+  fill(255);
+  textAlign(LEFT);
+  textSize(18);
+  text("Squarewave", sq_location.x, sq_location.y+30);
+  stroke(#FFED5F);
+
+  fill(255);
+  text("Sawtooth", sw_location.x, sw_location.y+30);
+
+  text("Sinewave", sin_location.x, sin_location.y+30);
+
+  //display the clients
+  noFill();
+  displayClients();
+
 
   /*** Communication with client ***/
   sendId();
@@ -124,10 +166,12 @@ void draw() {
     //println("ids killed");
     timer = 0;
   }
-
   turnOff();
   
-  println(adressedId);
+  //waveform display
+  stroke(#FFED5F);
+  rectMode(CORNER);
+  rect(width/2-200,30,400,220);
 }
 
 //Bring state machine and tabs together
@@ -142,7 +186,7 @@ void controlEvent(ControlEvent theControlEvent) {
 
   if (theControlEvent.getController().getName().equals("send")) {
     senden = true;
-    counter_sq++;
+    echoCounter++;
   }
 }
 
@@ -150,11 +194,7 @@ void controlEvent(ControlEvent theControlEvent) {
 void displayClients() {
   rectMode(CENTER);
   for (int i = 0; i < ipAdresses.size(); i++) {
-    drawLaptop(i, true, colorThumbnails);
-    if(mousePressed == true && detect == true) {
-      adressedId = i;
-      colorThumbnails = color(255);
-    }
+    drawLaptop(i, colorThumbnails);
   }
 }
 
@@ -182,8 +222,16 @@ void killIds() {
   }
 }
 
-//void mousePressed() {
-//  if(detect) {
-//   println("hey");
-//  }
-//}
+//display laptop interface (STATE 1)
+void mousePressed() {
+  for (int i = 0; i < ipAdresses.size(); i++) {
+    if (detect == true && displayState == false) {
+      adressedId = i;
+      displayState = true;
+      colorThumbnails = color(255);
+    } else if (detect == true && displayState == true) {
+      displayState = false;
+      colorThumbnails = color(255, 0, 0);
+    }
+  }
+}

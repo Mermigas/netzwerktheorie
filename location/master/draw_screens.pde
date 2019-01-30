@@ -1,5 +1,5 @@
 //Main function to draw the laptops
-void drawLaptop(int laptopID, boolean visibilityState, color laptopColor) {
+void drawLaptop(int laptopID, color laptopColor) {
   //print(laptopID);
   //if (visibilityState) {
   //  counterAnimateLaptop += 0.05;
@@ -18,7 +18,7 @@ void drawLaptop(int laptopID, boolean visibilityState, color laptopColor) {
   } else {
     detect = false;
   }
-  
+
   //drawCorners(position[0], position[1], laptopWidth, laptopHeight);
 }
 
@@ -43,7 +43,7 @@ void drawCorners(float tmpX, float tmpY, float tmpW, float tmpH) {
 float[] getLaptopPosition (int laptopID) {
 
   float x = width/2;
-  float y = 50;
+  float y = height/2-100;
   float spaceH = 0;
 
   if (laptopID%2==0) {

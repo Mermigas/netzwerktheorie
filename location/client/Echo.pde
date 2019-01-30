@@ -36,7 +36,7 @@ class Echo {
     if (alpha>0) {
       alpha = int(alpha - alphaPerS/frameRate);
     }
-    alpha =255;
+    alpha = 255;
     float timeBetween = map (freq, 0, 5000, 0, frameRate);
     strokeWeight(int(10*amp));
     stroke(255, 255, 255, alpha);

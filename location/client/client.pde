@@ -66,7 +66,7 @@ float th;
 float t;
 float counterAnimateText;
 float timerText;
-color bg = color(42, 40, 38);
+color bg = color(42);
 float ease(float q) {
   return 3*q*q - 2*q*q*q;
 }
@@ -137,16 +137,7 @@ void draw() {
       }
     }
     }
-    //
-    //println(fade);
-    //background(255, 255, 255, fade);
 
-
-
-
-    /*float[] position = mapCordinates(40000, 300);
-     fill(0);
-     ellipse(position[0], position[1], gtest*10, gtest*10);*/
   }
 
   //is connected

@@ -230,6 +230,6 @@ void oscEvent(OscMessage theOscMessage) {
     float time = theOscMessage.get(5).floatValue();
     int echoID = theOscMessage.get(6).intValue();
     drawVisualization(id, type, freq, time, amp, globalVelocity, echoID);
-    println("drawVisu");
+    
   }
 }

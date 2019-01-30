@@ -61,6 +61,7 @@ class EchoSystem {
 
     float tmpFreq = 1/(freq/200);
     if (timer>counter*tmpFreq) {
+      
       counter++;
       if (oLifetime>0) {
         addParticle();
@@ -88,6 +89,7 @@ class EchoParticle {
   float oLifetime;
   float freq;
   boolean phase;
+  float oRadius;
 
   float alphaPerCircle;
 
@@ -97,6 +99,7 @@ class EchoParticle {
     phase = tmpPhase;
     position = l.copy();
     radius = tmpRadius;
+    oRadius = radius;
     lifetime = tmpLifetime;
     oLifetime = tmpOLifetime;
     freq = tmpFreq;
@@ -108,6 +111,17 @@ class EchoParticle {
   void run() {
     update();
     display();
+    reset();
+    
+  }
+  void reset() {
+    for (int i = echo.size()-1; i >= 0; i--) {
+      EchoSystem p = echo.get(i);
+      for (int y = p.particles.size()-1; i >=0; i--) {
+        EchoParticle eP = p.particles.get(y);
+        eP.radius = oRadius;
+      }
+    }
   }
   void checkForEnd() {
 
@@ -140,7 +154,7 @@ class EchoParticle {
 
         if (distanceVectMag < minDistance) {
           //Collision
-          if (freq - eP.freq < 50) {
+         /* if (freq - eP.freq < 50) {
            //if freqdifference < 50
            float newRadius = (radius + eP.radius)/1.5;
            radius = newRadius;
@@ -150,8 +164,18 @@ class EchoParticle {
            lifetime += addLifetime;
            eP.oLifetime += addLifetime;
            eP.lifetime += addLifetime;
+          }*/
+          if (phase == eP.phase) {
+             //Same Phase 
+             float newRadius = radius + eP.radius;
+             radius = newRadius;
+             eP.radius = newRadius;
+             
+          } else {
+            //different Phase
+            radius = 0;
+            eP.radius = 0;
           }
-          
           
         }
       }
@@ -173,7 +197,7 @@ class EchoParticle {
     //checkForEnd();
     position.add(velocity);
     //println(velocity);
-
+    checkForCollision();
     lifetime -= (1/frameRate) * timeController;
     oLifetime -= (1/frameRate) * timeController;
     if (oLifetime < 0) {
@@ -200,6 +224,7 @@ class EchoParticle {
     //println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);
 
     ellipse(positionnew[0], positionnew[1], newSize, newSize);
+    
   }
 
   // Is the particle still useful?

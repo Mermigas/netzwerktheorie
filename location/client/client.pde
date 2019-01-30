@@ -19,7 +19,10 @@ float laptopHeight = 20;
 float laptopWidth = 30;
 float roomHeightInPX;
 float roomWidthInPX;
-float laptopXInCoordinateX;
+float globalRoomWidthInPx;
+float globalRoomHeightInPx;
+float laptopPXInCoordinatePX;
+float laptopYInCoordinateY;
 float timeController = 1;
 
 //NETWORK
@@ -63,7 +66,7 @@ float th;
 float t;
 float counterAnimateText;
 float timerText;
-color bg = color(42, 40, 38);
+color bg = color(42);
 float ease(float q) {
   return 3*q*q - 2*q*q*q;
 }
@@ -74,8 +77,8 @@ float ytest = 0;
 float gtest=100;
 
 void setup() {
- // fullScreen();
- size(800,600);
+  fullScreen();
+ //size(800,600);
   //FONTS
   light = createFont("Montserrat-Light.ttf", 32);
   light20 = createFont("Montserrat-Light.ttf", 20);
@@ -83,7 +86,7 @@ void setup() {
   ID = -1;
   //NETWORK
   // Listen on port 12001
-  oscP5 = new OscP5(this, 12001);
+  oscP5 = new OscP5(this, 12000);
   remoteLocation = new NetAddress("255.255.255.255", 12000);
   ownNetworkAddress = NetInfo.getHostAddress();
   rectMode(CENTER);
@@ -134,16 +137,7 @@ void draw() {
       }
     }
     }
-    //
-    //println(fade);
-    //background(255, 255, 255, fade);
 
-
-
-
-    /*float[] position = mapCordinates(40000, 300);
-     fill(0);
-     ellipse(position[0], position[1], gtest*10, gtest*10);*/
   }
 
   //is connected
@@ -223,6 +217,8 @@ void oscEvent(OscMessage theOscMessage) {
     ID = theOscMessage.get(1).intValue();
     roomWidth = theOscMessage.get(2).floatValue();
     roomHeight = theOscMessage.get(3).floatValue();
+    globalRoomWidthInPx = roomWidth*100*pxPerCm;
+    globalRoomHeightInPx = roomHeight*100*pxPerCm;
     maxLaptops = theOscMessage.get(4).intValue();
     //maxLaptops = 20;
   } else if (theOscMessage.checkAddrPattern("/data") == true) {
@@ -233,6 +229,7 @@ void oscEvent(OscMessage theOscMessage) {
     float  globalVelocity = theOscMessage.get(4).floatValue();
     float time = theOscMessage.get(5).floatValue();
     int echoID = theOscMessage.get(6).intValue();
-    drawVisualization(id, type, freq, amp, time, globalVelocity, echoID);
+    drawVisualization(id, type, freq, time, amp, globalVelocity, echoID);
+    println("drawVisu");
   }
 }

@@ -262,10 +262,10 @@ class EchoParticle {
 
     //draw just when object is in monitor position
     if (position.x > positionLeft && position.x < positionRight && position.y > positionTop && position.y < positionBottom) {
-      println("display: " + type);
-      if (type.equals( "squarewave")) {
+      
+      if (type.equals( "sinewave")) {
 
-        println("innerparticlesqaure");
+       
         strokeWeight(1);
         stroke(alpha);
         if (phase) {
@@ -282,7 +282,7 @@ class EchoParticle {
 
 
         ellipse(positionnew[0], positionnew[1], newSize, newSize);
-      } else if (type.equals( "sinewave")) {
+      } else if (type.equals( "squarewave")) {
       } else if (type.equals( "sawthooth")) {
       }
     }

@@ -27,11 +27,11 @@ class EchoSystem {
     println("init radius: " + tmpradius + " init2: " + radius);
     particlesPerRound *=  amp;
     oLifetime = tmpTime;
-    
+
     timeAfter = 3 * (0.5 * tmpAmp);
     lifetime = tmpTime + timeAfter;
     println("new EchoSystem:" + echoID);
-    
+
     //play sound 
     if (tmpEchoID == ID) {
       square.freq(tmpFreq);
@@ -41,12 +41,12 @@ class EchoSystem {
 
   void addParticle() {
     //phasenveschiebung)
-      if (phase) {
-        phase = false;
-      }else {
-       phase = true; 
-      }
-    
+    if (phase) {
+      phase = false;
+    } else {
+      phase = true;
+    }
+
     for (int i=0; i<particlesPerRound; i++) {
       particles.add(new EchoParticle(origin, i, particlesPerRound, radius, lifetime, oLifetime, freq, phase));
     }
@@ -69,7 +69,7 @@ class EchoSystem {
 
     float tmpFreq = 1/(freq/200);
     if (timer>counter*tmpFreq) {
-      
+
       counter++;
       if (oLifetime>0) {
         addParticle();
@@ -114,18 +114,24 @@ class EchoParticle {
     oLifetime = tmpOLifetime;
     originalLifeTime = lifetime;
     freq = tmpFreq;
-    
+
 
     alpha = 255.0;
-    println("lifetime: " + lifetime + "OLifeTime: " + oLifetime);
-    alphaPerCircle = (alpha-bg)/(lifetime-oLifetime);
+    if (!test) {
+      println("lifetime: " + lifetime + "OLifeTime: " + oLifetime);
+      println(lifetime-oLifetime);
+      println("alpha: "+ alpha +" - " + bg + " = " + (alpha-bg));
+      println((alpha-bg)/(lifetime-oLifetime));
+
+      test = true;
+    }
+    alphaPerCircle = (alpha-bgFloat)/(lifetime-oLifetime);
   }
 
   void run() {
     update();
     display();
     reset();
-    
   }
   void reset() {
     for (int i = echo.size()-1; i >= 0; i--) {
@@ -142,60 +148,63 @@ class EchoParticle {
     //float roomWidthInPX = width;
     // float roomHeightInPX = height;
     //--------- end 
-
+    boolean end = false;
     if ((position.x + radius > globalRoomWidthInPx) || (position.x - radius < 0)) {
       velocity.x = velocity.x * - 1;
       radius *= 0.8;
+      end = true;
     }
-    if ((position.y + radius > globalRoomHeightInPx) || (position.y - radius < 0)) {
+    if (
+    //(position.y + radius > globalRoomHeightInPx) || 
+    (position.y - radius < 0)) {
       velocity.y = velocity.y * - 1;
+      if (!end) {
+        radius *= 0.8;
+      }
     }
   }
   void checkForCollision() {
-   if (originalLifeTime - lifetime > preFaultTime) {
-        for (int i = echo.size()-1; i >= 0; i--) {
-      EchoSystem p = echo.get(i);
-      for (int y = p.particles.size()-1; i >=0; i--) {
-        EchoParticle eP = p.particles.get(y);
-        // Get distances between the balls components
-        PVector distanceVect = PVector.sub(eP.position, position);
+    if (originalLifeTime - lifetime > preFaultTime) {
+      for (int i = echo.size()-1; i >= 0; i--) {
+        EchoSystem p = echo.get(i);
+        for (int y = p.particles.size()-1; i >=0; i--) {
+          EchoParticle eP = p.particles.get(y);
+          // Get distances between the balls components
+          PVector distanceVect = PVector.sub(eP.position, position);
 
-        // Calculate magnitude of the vector separating the balls
-        float distanceVectMag = distanceVect.mag();
+          // Calculate magnitude of the vector separating the balls
+          float distanceVectMag = distanceVect.mag();
 
-        // Minimum distance before they are touching
-        float minDistance = radius + eP.radius;
+          // Minimum distance before they are touching
+          float minDistance = radius + eP.radius;
 
-        if (distanceVectMag < minDistance) {
-          //Collision
-         /* if (freq - eP.freq < 50) {
-           //if freqdifference < 50
-           float newRadius = (radius + eP.radius)/1.5;
-           radius = newRadius;
-           eP.radius = newRadius;
-           float addLifetime = map(radius + eP.radius, 0, 20, 0,1)*1.5;
-           oLifetime += addLifetime;
-           lifetime += addLifetime;
-           eP.oLifetime += addLifetime;
-           eP.lifetime += addLifetime;
-          }*/
-          if (phase == eP.phase) {
-             //Same Phase 
-             float newRadius = radius + eP.radius;
+          if (distanceVectMag < minDistance) {
+            //Collision
+            /* if (freq - eP.freq < 50) {
+             //if freqdifference < 50
+             float newRadius = (radius + eP.radius)/1.5;
              radius = newRadius;
              eP.radius = newRadius;
-             
-          } else {
-            //different Phase
-            radius = 0;
-            eP.radius = 0;
+             float addLifetime = map(radius + eP.radius, 0, 20, 0,1)*1.5;
+             oLifetime += addLifetime;
+             lifetime += addLifetime;
+             eP.oLifetime += addLifetime;
+             eP.lifetime += addLifetime;
+             }*/
+            if (phase == eP.phase) {
+              //Same Phase 
+              float newRadius = radius + eP.radius;
+              radius = newRadius;
+              eP.radius = newRadius;
+            } else {
+              //different Phase
+              radius = 0;
+              eP.radius = 0;
+            }
           }
-          
         }
       }
     }
-   }
- 
   }
 
   // Method to update position
@@ -211,39 +220,38 @@ class EchoParticle {
     lifetime -= (1/frameRate) * timeController;
     oLifetime -= (1/frameRate) * timeController;
     if (oLifetime < 0) {
-      if (alpha>bg) {
+      if (alpha>bgFloat) {
         //println(alphaPerCircle/frameRate);
         alpha -= (alphaPerCircle/frameRate) * timeController;
-      }else {
-       alpha = bg; 
+      } else {
+        alpha = bgFloat;
       }
-      
     }
   }
 
   // Method to display
   void display() {
-    strokeWeight(1);
-    stroke(alpha);
-    if(phase) {
-    
-      fill(alpha);
-    }else {
-      
-      fill(bg);
-    }
+
+
     //draw just when object is in monitor position
-    //println(positionLeft +" < " + position.x + " > " + positionRight);
-      if (position.x > positionLeft && position.x < positionRight && position.y > positionTop && position.y < positionBottom) {
+    if (position.x > positionLeft && position.x < positionRight && position.y > positionTop && position.y < positionBottom) {
+      strokeWeight(1);
+      stroke(alpha);
+      if (phase) {
+        fill(alpha);
+      } else {
+        fill(bg);
+      }
+
       //println("XPositionXAlt: " + position.x + "positionYAlt: " + position.y);
       float newSize = mapSizeW(radius);
       // println("radius: " + radius + "newSize: " + newSize + "int: " + int(newSize));
       float [] positionnew = mapCordinates(position.x, position.y);
       //println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);
-      
+
+
       ellipse(positionnew[0], positionnew[1], newSize, newSize);
     }
-    
   }
 
   // Is the particle still useful?

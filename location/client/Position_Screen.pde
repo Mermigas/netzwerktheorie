@@ -57,7 +57,7 @@ void drawLaptop(int laptopID, boolean visibilityState) {
 float[] getLaptopPosition (int laptopID) {
 
   float x = width/2;
-  float y = 50;
+  float y = marginHeight + 25;
   float spaceH = 0;
 
   if (laptopID%2==0) {

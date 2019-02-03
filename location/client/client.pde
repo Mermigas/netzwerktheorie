@@ -6,7 +6,7 @@ import processing.sound.*;
 // Global instances for communication objects
 OscP5 oscP5;
 NetAddress remoteLocation;
-
+boolean test = false;
 //GLOBALE VARIABLEN
 boolean testMode = false;
 String MODE="CONNECTING"; 
@@ -66,6 +66,7 @@ float t;
 float counterAnimateText;
 float timerText;
 color bg = color(42);
+float bgFloat = 42;
 float ease(float q) {
   return 3*q*q - 2*q*q*q;
 }
@@ -87,7 +88,7 @@ void setup() {
 
   ID = -1;
   //NETWORK
-  // Listen on port 12001
+  // Listen on port 12000
   oscP5 = new OscP5(this, 12000);
   remoteLocation = new NetAddress("255.255.255.255", 12000);
   ownNetworkAddress = NetInfo.getHostAddress();

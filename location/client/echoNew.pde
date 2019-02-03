@@ -118,7 +118,7 @@ class EchoParticle {
     freq = tmpFreq;
     type = tmpType;
 
-
+println("PARTICLE: " + type);
     alpha = 255.0;
     if (!test) {
       println("lifetime: " + lifetime + "OLifeTime: " + oLifetime);
@@ -238,10 +238,10 @@ class EchoParticle {
 
     //draw just when object is in monitor position
     if (position.x > positionLeft && position.x < positionRight && position.y > positionTop && position.y < positionBottom) {
+println("display: " + type);
+      if (type.equals( "squarewave")) {
 
-      if (type == "sinewave") {
-
-
+  println("innerparticlesqaure");
         strokeWeight(1);
         stroke(alpha);
         if (phase) {
@@ -258,9 +258,9 @@ class EchoParticle {
 
 
         ellipse(positionnew[0], positionnew[1], newSize, newSize);
-      }else if (type == "squarewave") {
+      }else if (type.equals( "sinewave")) {
         
-      }else if (type == "sawthooth") {
+      }else if (type.equals( "sawthooth")) {
         
       }
     }

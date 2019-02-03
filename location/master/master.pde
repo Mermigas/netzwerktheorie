@@ -7,7 +7,7 @@ OscP5 oscP5;
 NetAddress remoteLocation;
 
 /* Controllers */
-ControlP5 cp5; //Setup Controller
+ControlP5 cp5; //Setup Controllers
 
 Toggle toggle_1;
 Toggle toggle_2;
@@ -69,7 +69,7 @@ boolean ipMatchId = false;
 
 float timer; //timer to kill all ids
 
-int numComputers = 12;
+int numComputers = 10;
 
 boolean isOver = false;
 
@@ -104,7 +104,7 @@ void setup() {
   //listen
   oscP5 = new OscP5(this, 12000);
   //send
-  remoteLocation = new NetAddress("255.255.255.255", 12001);
+  remoteLocation = new NetAddress("255.255.255.255", 12000);
 
   ipAdresses = new StringList();
 
@@ -201,14 +201,14 @@ void draw() {
   for (int i = 0; i < ipAdresses.size(); i++) {
     screens.add(new Screen(i));
   }
-  
+
   for (int i = 0; i < ipAdresses.size(); i++) {
     Screen s = screens.get(i);
     s.display();
     s.detectCollision();
   }
 
-  println(ipAdresses.size());
+  println(adressedId);
 
   /* DRAW END */
 }

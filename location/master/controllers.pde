@@ -71,7 +71,7 @@ void sq_Controller() {
   //Frequency knob
   cp5.addKnob("sq_freq")
     .setPosition(sq_location.x, sq_location.y+space_t_k)
-    .setRange(0, 500)
+    .setRange(20, 300)
     .setRadius(knobR)
     .setCaptionLabel("Frequenz")
     .setColorCaptionLabel(color(#FFED5F))
@@ -112,7 +112,7 @@ void sq_Controller() {
   //duration knob
   cp5.addKnob("sq_duration")
     .setPosition(sq_location.x+knobR*4+space_k_k*2, sq_location.y+space_t_k)
-    .setRange(0, 30)
+    .setRange(3, 30)
     .setValue(1)
     .setRadius(knobR)
     .setCaptionLabel("Dauer")
@@ -153,7 +153,7 @@ void sw_Controller() {
   //Frequency knob
   cp5.addKnob("sw_freq")
     .setPosition(sw_location.x, sw_location.y+space_t_k)
-    .setRange(0, 500)
+    .setRange(20, 300)
     .setRadius(knobR)
     .setCaptionLabel("Frequenz")
     .setColorCaptionLabel(color(#FFED5F))
@@ -194,7 +194,7 @@ void sw_Controller() {
   //duration knob
   cp5.addKnob("sw_duration")
     .setPosition(sw_location.x+knobR*4+space_k_k*2, sw_location.y+space_t_k)
-    .setRange(0, 5)
+    .setRange(3, 30)
     .setValue(1)
     .setRadius(knobR)
     .setCaptionLabel("Dauer")
@@ -235,7 +235,7 @@ void sin_Controller() {
   //Frequency knob
   cp5.addKnob("sin_freq")
     .setPosition(sin_location.x, sin_location.y+space_t_k)
-    .setRange(0, 500)
+    .setRange(20, 300)
     .setRadius(knobR)
     .setCaptionLabel("Frequenz")
     .setColorCaptionLabel(color(#FFED5F))
@@ -276,7 +276,7 @@ void sin_Controller() {
   //duration knob
   cp5.addKnob("sin_duration")
     .setPosition(sin_location.x+knobR*4+space_k_k*2, sin_location.y+space_t_k)
-    .setRange(0, 5)
+    .setRange(3, 30)
     .setValue(1)
     .setRadius(knobR)
     .setCaptionLabel("Dauer")

@@ -40,7 +40,7 @@ float[] squareFunction() {
   float ampV = cp5.getController("sq_amp").getValue();
   float durationV = 0;
   //Just read duration if turned on
-  if(squareOn) {
+  if (squareOn) {
     durationV = cp5.getController("sq_duration").getValue();
   }
   float[] array = {freqV, ampV};
@@ -48,7 +48,7 @@ float[] squareFunction() {
   square.freq(freqV);
   square.amp(ampV);
   duration_sq = durationV;
-  
+
   return array;
 }
 
@@ -58,7 +58,7 @@ float[] sawFunction() {
   float ampV = cp5.getController("sw_amp").getValue();
   float durationV = 0;
   //Just read duration if turned on
-  if(sawOn) {
+  if (sawOn) {
     durationV = cp5.getController("sw_duration").getValue();
   }
   float[] array = {freqV, ampV};
@@ -76,7 +76,7 @@ float[] sineFunction() {
   float ampV = cp5.getController("sin_amp").getValue();
   float durationV = 0;
   //Just read duration if turned on
-  if(sinOn) {
+  if (sinOn) {
     durationV = cp5.getController("sin_duration").getValue();
   }
   float[] array = {freqV, ampV};

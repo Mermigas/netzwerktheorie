@@ -34,16 +34,16 @@ class EchoSystem {
     }
     counterPhase++;
   }
-  
+
   void run() {
     float tmpFreq = 1/(freq/200);
     timerEcho += 1/frameRate;
-    
+
     if (timerEcho>nextTime) {
       addParticle();
       nextTime += tmpFreq;
     }
-    
+
     for (int i = particles.size()-1; i >= 0; i--) {
       EchoParticle p = particles.get(i);
       p.run();
@@ -102,7 +102,7 @@ class EchoParticle {
 
   // Is the particle still useful?
   boolean isDead() {
-    if(position.x < displayVX || position.x > displayVX + displayVW || position.y < displayVY || position.y > displayVY + displayVH) {
+    if (position.x < displayVX || position.x > displayVX + displayVW || position.y < displayVY || position.y > displayVY + displayVH) {
       return true;
     } else {
       return false;

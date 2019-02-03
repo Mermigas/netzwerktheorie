@@ -55,7 +55,7 @@ void sendVelocity() {
   global_velocity = cp5.getController("global_velocity").getValue();
   OscMessage sendData = new OscMessage("/global_velocity");
   sendData.add(global_velocity);
-  
+
   oscP5.send(sendData, remoteLocation);
 }
 

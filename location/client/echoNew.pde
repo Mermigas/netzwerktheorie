@@ -92,7 +92,7 @@ class EchoParticle {
   boolean phase;
   float oRadius;
   float originalLifeTime;
-  float preFaultTime = 1;
+  float preFaultTime = 2;
 
   float alphaPerCircle;
 
@@ -110,7 +110,7 @@ class EchoParticle {
     
 
     alpha = 255.0;
-    //println("lifetime: " + lifetime + "OLifeTime: " + oLifetime);
+    println("lifetime: " + lifetime + "OLifeTime: " + oLifetime);
     alphaPerCircle = (alpha-bg)/(lifetime-oLifetime);
   }
 

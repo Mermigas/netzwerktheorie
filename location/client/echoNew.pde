@@ -13,6 +13,7 @@ class EchoSystem {
   float counter = 1;
   float counterPhase = 0;
   boolean phase = true;
+  String type;
 
 
 
@@ -27,6 +28,7 @@ class EchoSystem {
     println("init radius: " + tmpradius + " init2: " + radius);
     particlesPerRound *=  amp;
     oLifetime = tmpTime;
+    type = tmpType;
 
     timeAfter = 3 * (0.5 * tmpAmp);
     lifetime = tmpTime + timeAfter;
@@ -48,7 +50,7 @@ class EchoSystem {
     }
 
     for (int i=0; i<particlesPerRound; i++) {
-      particles.add(new EchoParticle(origin, i, particlesPerRound, radius, lifetime, oLifetime, freq, phase));
+      particles.add(new EchoParticle(origin, i, particlesPerRound, radius, lifetime, oLifetime, freq, phase, type));
     }
     counterPhase++;
   }
@@ -90,7 +92,6 @@ class EchoSystem {
 class EchoParticle {
   PVector position;
   PVector velocity;
-  PVector acceleration;
   float alpha;
   float radius;
   float lifetime;
@@ -100,11 +101,12 @@ class EchoParticle {
   float oRadius;
   float originalLifeTime;
   float preFaultTime = 2;
+  String type;
 
   float alphaPerCircle;
 
-  EchoParticle(PVector l, float num, float maxNum, float tmpRadius, float tmpLifetime, float tmpOLifetime, float tmpFreq, boolean tmpPhase) {
-    //acceleration = new PVector(1.0, 1.00);
+  EchoParticle(PVector l, float num, float maxNum, float tmpRadius, float tmpLifetime, float tmpOLifetime, float tmpFreq, boolean tmpPhase, String tmpType) {
+
     velocity = new PVector(sin(map(num, 0, maxNum, 0, 2*PI)), cos(map(num, 0, maxNum, 0, 2*PI)));
     phase = tmpPhase;
     position = l.copy();
@@ -114,6 +116,7 @@ class EchoParticle {
     oLifetime = tmpOLifetime;
     originalLifeTime = lifetime;
     freq = tmpFreq;
+    type = tmpType;
 
 
     alpha = 255.0;
@@ -136,7 +139,7 @@ class EchoParticle {
   void reset() {
     for (int i = echo.size()-1; i >= 0; i--) {
       EchoSystem p = echo.get(i);
-      for (int y = p.particles.size()-1; i >=0; i--) {
+      for (int y = p.particles.size()-1; y >=0; y--) {
         EchoParticle eP = p.particles.get(y);
         eP.radius = oRadius;
       }
@@ -155,8 +158,8 @@ class EchoParticle {
       end = true;
     }
     if (
-    //(position.y + radius > globalRoomHeightInPx) || 
-    (position.y - radius < 0)) {
+      //(position.y + radius > globalRoomHeightInPx) || 
+      (position.y - radius < 0)) {
       velocity.y = velocity.y * - 1;
       if (!end) {
         radius *= 0.8;
@@ -167,7 +170,7 @@ class EchoParticle {
     if (originalLifeTime - lifetime > preFaultTime) {
       for (int i = echo.size()-1; i >= 0; i--) {
         EchoSystem p = echo.get(i);
-        for (int y = p.particles.size()-1; i >=0; i--) {
+        for (int y = p.particles.size()-1; y >=0; y--) {
           EchoParticle eP = p.particles.get(y);
           // Get distances between the balls components
           PVector distanceVect = PVector.sub(eP.position, position);
@@ -213,7 +216,7 @@ class EchoParticle {
     velocity.x *=  (1 +  0.05 * timeController);
     velocity.y *= (1 + 0.05 * timeController);
 
-    //checkForEnd();
+    checkForEnd();
     position.add(velocity);
 
     checkForCollision();
@@ -235,22 +238,31 @@ class EchoParticle {
 
     //draw just when object is in monitor position
     if (position.x > positionLeft && position.x < positionRight && position.y > positionTop && position.y < positionBottom) {
-      strokeWeight(1);
-      stroke(alpha);
-      if (phase) {
-        fill(alpha);
-      } else {
-        fill(bg);
+
+      if (type == "sinewave") {
+
+
+        strokeWeight(1);
+        stroke(alpha);
+        if (phase) {
+          fill(alpha);
+        } else {
+          fill(bg);
+        }
+
+        //println("XPositionXAlt: " + position.x + "positionYAlt: " + position.y);
+        float newSize = mapSizeW(radius);
+        // println("radius: " + radius + "newSize: " + newSize + "int: " + int(newSize));
+        float [] positionnew = mapCordinates(position.x, position.y);
+        //println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);
+
+
+        ellipse(positionnew[0], positionnew[1], newSize, newSize);
+      }else if (type == "squarewave") {
+        
+      }else if (type == "sawthooth") {
+        
       }
-
-      //println("XPositionXAlt: " + position.x + "positionYAlt: " + position.y);
-      float newSize = mapSizeW(radius);
-      // println("radius: " + radius + "newSize: " + newSize + "int: " + int(newSize));
-      float [] positionnew = mapCordinates(position.x, position.y);
-      //println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);
-
-
-      ellipse(positionnew[0], positionnew[1], newSize, newSize);
     }
   }
 

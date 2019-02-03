@@ -98,6 +98,8 @@ class EchoParticle {
     // println("radius: " + radius + "newSize: " + newSize + "int: " + int(newSize));
     //println(position.x + " " + position.y);
     ellipse(position.x, position.y, newSize, newSize);
+    ellipse(position.x + 10, position.y, newSize, newSize);
+    ellipse(position.x - 10, position.y, newSize, newSize);
   }
 
   // Is the particle still useful?

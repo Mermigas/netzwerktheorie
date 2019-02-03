@@ -30,7 +30,7 @@ void controller() {
     ;
 
   cp5.addSlider("global_velocity")
-    .setPosition(width/2-150, sq_location.y+180)
+    .setPosition(width/2-150, sq_location.y+195)
     .setSize(100, 15)
     .setCaptionLabel("Globale Geschwindigkeit")
     .setRange(0, 1)

@@ -25,17 +25,17 @@ color sendingStateColor = color(#FFED5F);
 //different controllers
 SqrOsc square;
 boolean squareOn = false;
-PVector sq_location = new PVector(180, 280);
+PVector sq_location = new PVector(760, 270);
 float duration_sq = 0;
 
 SawOsc saw;
 boolean sawOn = false;
-PVector sw_location = new PVector(470, 280);
+PVector sw_location = new PVector(470, 270);
 float duration_sw = 0;
 
 SinOsc sin;
 boolean sinOn = false;
-PVector sin_location = new PVector(760, 280);
+PVector sin_location = new PVector(180, 270);
 float duration_sin = 0;
 
 int echoCounter = -1; //counts how often the waves were sent
@@ -182,11 +182,11 @@ void draw() {
   //display visualisations
   stroke(#FFED5F);
   noFill();
-  if (squareOn) {
+  if (sinOn) {
     for (int i = echo.size()-1; i >= 0; i--) {
       EchoSystem p = echo.get(i);
-      p.freq = squareFunction()[0];
-      p.amp = squareFunction()[1];
+      p.freq = sineFunction()[0];
+      p.amp = sineFunction()[1];
       p.run();
     }
   }
@@ -194,21 +194,21 @@ void draw() {
   //seperators
   stroke(#FFED5F);
   line(0, displayVH, width, displayVH);
-  line(0, sq_location.y+215, width, sq_location.y+215);
+  line(0, sq_location.y+170, width, sq_location.y+170);
 
   //Display the clients
   screens.clear();
-  for (int i = 0; i < ipAdresses.size(); i++) {
+  for (int i = ipAdresses.size() - 1; i >= 0 ; i--) {
     screens.add(new Screen(i));
   }
 
-  for (int i = 0; i < ipAdresses.size(); i++) {
+  for (int i = ipAdresses.size() - 1; i >= 0 ; i--) {
     Screen s = screens.get(i);
     s.display();
     s.detectCollision();
   }
 
-  println(adressedId);
+  println(echoCounter);
 
   /* DRAW END */
 }
@@ -250,7 +250,7 @@ void sendingSignal() {
   if (senden == false) {
     sendingStateColor = color(#FFED5F);
   } else {
-    sendingStateColor = color(0, 255, 0);
+    sendingStateColor = color(#55F063);
   }
 }
 
@@ -262,7 +262,7 @@ void killIds() {
 
 //get ip adressed
 void mousePressed() {
-  for (int i = 0; i < ipAdresses.size(); i++) {
+  for (int i = ipAdresses.size() - 1; i >= 0 ; i--) {
     Screen s = screens.get(i);
     if (s.detectCollision()) {
       adressedId = i;

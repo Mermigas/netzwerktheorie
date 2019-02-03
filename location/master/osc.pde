@@ -38,7 +38,7 @@ void sendData() {
     sendData.add(echoCounter); // counter #6
     oscP5.send(sendData, remoteLocation);
   }
-  if (squareOn == true) {
+  if (sinOn == true) {
     sendData.add(adressedId); //The id to which you should send it #0
     sendData.add("sinewave"); //is square active? #1
     sendData.add(sineFunction()[0]); //send frequency of square #2

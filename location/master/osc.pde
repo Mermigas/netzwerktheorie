@@ -23,17 +23,18 @@ void sendData() {
     sendData.add("squarewave"); //is square active? #1
     sendData.add(squareFunction()[0]); //send frequency of square #2
     sendData.add(squareFunction()[1]); //send amp of square #3
-    sendData.add(100.0); //global velocity #4
-    sendData.add(duration_sq); // time (how long should it send) #5
-    sendData.add(echoCounter); // counter #6
+    sendData.add(global_velocity); //global velocity #4
+    sendData.add(duration_sq); //time (how long should it send) #5
+    sendData.add(echoCounter); //counter #6
     oscP5.send(sendData, remoteLocation);
+    
   }
   if (sawOn == true) {
     sendData.add(adressedId); //The id to which you should send it #0
     sendData.add("sawtooth"); //is square active? #1
     sendData.add(sawFunction()[0]); //send frequency of square #2
     sendData.add(sawFunction()[1]); //send amp of square #3
-    sendData.add(100.0); //global velocity #4
+    sendData.add(global_velocity); //global velocity #4
     sendData.add(duration_sw); // time (how long should it send) #5
     sendData.add(echoCounter); // counter #6
     oscP5.send(sendData, remoteLocation);
@@ -43,7 +44,7 @@ void sendData() {
     sendData.add("sinewave"); //is square active? #1
     sendData.add(sineFunction()[0]); //send frequency of square #2
     sendData.add(sineFunction()[1]); //send amp of square #3
-    sendData.add(100.0); //global velocity #4
+    sendData.add(global_velocity); //global velocity #4
     sendData.add(duration_sin); // time (how long should it send) #5
     sendData.add(echoCounter); // counter #6
     oscP5.send(sendData, remoteLocation);

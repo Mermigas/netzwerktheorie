@@ -20,23 +20,27 @@ int space_k_k = 20;
 int buttonS_w = 40;
 int controlArea = knobR*6+space_k_k*2;
 
+color sendingStateColor = color(#FFED5F);
+
 //different controllers
 SqrOsc square;
 boolean squareOn = false;
-PVector sq_location = new PVector(180, 300);
-float duration_sq;
+PVector sq_location = new PVector(180, 280);
+float duration_sq = 0;
 
 SawOsc saw;
 boolean sawOn = false;
-PVector sw_location = new PVector(470, 300);
-float duration_sw;
+PVector sw_location = new PVector(470, 280);
+float duration_sw = 0;
 
 SinOsc sin;
 boolean sinOn = false;
-PVector sin_location = new PVector(760, 300);
-float duration_sin;
+PVector sin_location = new PVector(760, 280);
+float duration_sin = 0;
 
-int echoCounter = -1; //counts how often the waves were sent
+int echoCounter = 0; //counts how often the waves were sent
+
+float global_velocity;
 
 /* State Machine */
 int STATE = 0;
@@ -69,15 +73,7 @@ int numComputers = 12;
 
 boolean isOver = false;
 
-//draw screens
-float spacerWidth = 20;
-float spacerHeight = 30;
-float counterAnimateLaptop;
-float laptopHeight = 20;
-float laptopWidth = 30;
-boolean detect = false;
 
-//laptop thumnails
 int colorThumbnails = color(255, 0, 0);
 boolean displayState = false;
 
@@ -89,8 +85,18 @@ ControlFont font_l;
 ControlFont font_r;
 ControlFont font_b;
 
+//display visualisation
+ArrayList<EchoSystem> echo;
+int displayVX, displayVY, displayVW, displayVH;
+color bg = color(42);
+
+float freq;
+float amp;
+//float duration;
+
+ArrayList <Screen> screens;
+
 void setup() {
-  //size(640, 420);
   size(1200, 850);
   //fullScreen();
 
@@ -115,46 +121,46 @@ void setup() {
 
   /*** font ***/
   textFont(pfont_r);
+
+  /*** visual display ***/
+  displayVW = width;
+  displayVH = 260;
+  displayVX = 0;
+  displayVY = 0;
+
+  echo = new ArrayList<EchoSystem>();
+  echo.add(new EchoSystem(displayVX + displayVW/2, displayVY + displayVH/2, 100, 5, 0.5, "sinus", 1));
+
+  screens = new ArrayList<Screen>();
 }
 
 void draw() {
+  /* DRAW BEGIN */
   background(#404040);
-
-  /*** Interface ***/
-  //area for sending
-  rectMode(CENTER);
-  fill(0, 0);
-  stroke(#FFED5F);
-  rect(width/2, height-30, 560, 60);
 
   //Call the waves
   squareFunction();
   sawFunction();
   sineFunction();
 
-  //set how long Data should be send into the network
+  //has nothing do to with the actual sending. But calculates the current sending duration
   if (senden == true) {
-    durationAndsend(duration_sq);
-    durationAndsend(duration_sw);
-    durationAndsend(duration_sin);
+    duration(duration_sq + duration_sw + duration_sin);
   }
+  //interface element: sending status
+  sendingSignal();
+
+  //get global velocity
+  global_velocity = cp5.getController("global_velocity").getValue();
 
   //Text for the controllers
   fill(255);
+  stroke(#FFED5F);
   textAlign(LEFT);
   textSize(18);
   text("Squarewave", sq_location.x, sq_location.y+30);
-  stroke(#FFED5F);
-
-  fill(255);
   text("Sawtooth", sw_location.x, sw_location.y+30);
-
   text("Sinewave", sin_location.x, sin_location.y+30);
-
-  //display the clients
-  noFill();
-  displayClients();
-
 
   /*** Communication with client ***/
   sendId();
@@ -163,56 +169,84 @@ void draw() {
   //Set all ids to false
   if (timer >= 5) {
     killIds();
-    //println("ids killed");
     timer = 0;
   }
-  turnOff();
-  
-  //waveform display
+
+  /*** Interface ***/
+  //area for sending
+  rectMode(CENTER);
+  fill(0, 0);
+  stroke(sendingStateColor);
+  rect(width/2, height-22, 180, 40);
+
+  //display visualisations
   stroke(#FFED5F);
-  rectMode(CORNER);
-  rect(width/2-200,30,400,220);
+  noFill();
+  if (squareOn) {
+    for (int i = echo.size()-1; i >= 0; i--) {
+      EchoSystem p = echo.get(i);
+      p.freq = squareFunction()[0];
+      p.amp = squareFunction()[1];
+      p.run();
+    }
+  }
+
+  //seperators
+  stroke(#FFED5F);
+  line(0, displayVH, width, displayVH);
+  line(0, sq_location.y+215, width, sq_location.y+215);
+
+  //Display the clients
+  for (int i = 0; i < ipAdresses.size(); i++) {
+    screens.add(new Screen(i));
+  }
+  for (int i = 0; i < ipAdresses.size(); i++) {
+    Screen s = screens.get(i);
+    s.display();
+    s.detectCollision();
+  }
+
+  println(echoCounter);
+
+  /* DRAW END */
 }
 
 //Bring state machine and tabs together
 void controlEvent(ControlEvent theControlEvent) {
-  if (theControlEvent.isTab()) {
-    if (theControlEvent.getTab().getId() == 1) {
-      STATE = 1;
-    } else {
-      STATE = 0;
-    }
-  }
 
+  //turn send true if "senden" is clicked and count up echoCounter for each waveform
   if (theControlEvent.getController().getName().equals("send")) {
     senden = true;
-    echoCounter++;
-  }
-}
-
-//Display the clients
-void displayClients() {
-  rectMode(CENTER);
-  for (int i = 0; i < ipAdresses.size(); i++) {
-    drawLaptop(i, colorThumbnails);
+    //if "senden" is clicked --> sendData() once!
+    sendData();
+    if (squareOn == true) {
+      echoCounter++;
+    }
+    if (sawOn == true) {
+      echoCounter++;
+    }
+    if (sinOn == true) {
+      echoCounter++;
+    }
   }
 }
 
 //This function creates the duration and sends the value
-void durationAndsend(float d_value) {
+void duration(float durationWave) {
   time = time + 1/frameRate;
 
-  //As long as time is under choosen time --> send data
-  if (time <= d_value) {
-    isOver = false;
-    sendData();
-  }
-
-  //If time is over choosen time --> set everything to default
-  if (time > d_value) {
-    time = 0;
+  if (time >= durationWave) {
     senden = false;
-    isOver = true;
+    time = 0;
+  }
+}
+
+//is the sending 
+void sendingSignal() {
+  if (senden == false) {
+    sendingStateColor = color(#FFED5F);
+  } else {
+    sendingStateColor = color(0, 255, 0);
   }
 }
 
@@ -222,16 +256,15 @@ void killIds() {
   }
 }
 
-//display laptop interface (STATE 1)
+//get ip adressed
 void mousePressed() {
   for (int i = 0; i < ipAdresses.size(); i++) {
-    if (detect == true && displayState == false) {
+    Screen s = screens.get(i);
+    if (s.detectCollision()) {
       adressedId = i;
-      displayState = true;
-      colorThumbnails = color(255);
-    } else if (detect == true && displayState == true) {
-      displayState = false;
-      colorThumbnails = color(255, 0, 0);
+      s.laptopColor = color(#FFED5F);
+    } else {
+      s.laptopColor = color(0);
     }
   }
 }

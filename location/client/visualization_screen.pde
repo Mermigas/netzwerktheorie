@@ -48,17 +48,17 @@ void getPositionInRoom() {
     
   }
   //println("xMitteRoom: " + xMitteRoomPx + " yMitteRoom: " + yMitteRoomPx);
-  positionLeft = xMitteRoomPx - laptopSizeW/2*pxPerCm;
+  positionLeft = xMitteRoomPx - width/2;
   //println("positionLeft: " + positionLeft);
-  positionTop = yMitteRoomPx - laptopSizeH/2*pxPerCm;
-  positionRight = xMitteRoomPx + laptopSizeW/2*pxPerCm;
-  positionBottom = yMitteRoomPx + laptopSizeH/2*pxPerCm;
+  positionTop = yMitteRoomPx - height/2;
+  positionRight = xMitteRoomPx + width/2;
+  positionBottom = yMitteRoomPx + height/2;
   laptopPXInCoordinatePX = width/(positionRight-positionLeft+1);
  // laptopXInCoordinateX = mapSizeW(laptopXInCoordinateX);
   laptopYInCoordinateY = height/(positionBottom-positionTop+1);
   //laptopYInCoordinateY = mapSizeH(laptopYInCoordinateY);
   //println("positionRight:" +  positionRight);
-  float[] positionTest  = mapCordinates(positionLeft, positionBottom);
+  float[] positionTest  = mapCordinates(positionRight, positionBottom);
   println("mapping: " + positionTest[0] + " " + positionTest[1] + " height: " + height );
   float mapvoll =  (-positionTop*laptopPXInCoordinatePX)+(roomHeight*100*pxPerCm*laptopPXInCoordinatePX);
   float mapnull = -positionTop*laptopPXInCoordinatePX;

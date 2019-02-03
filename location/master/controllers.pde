@@ -13,7 +13,7 @@ void controller() {
 
 
   cp5.addButton("send")
-    .setPosition(width/2+150, height-35)
+    .setPosition(width/2-30, height-30)
     .setCaptionLabel("Senden")
     .setColorBackground(color(0, 0, 0))
     .setColorForeground(color(0, 0, 0))
@@ -30,7 +30,7 @@ void controller() {
     ;
 
   cp5.addSlider("global_velocity")
-    .setPosition(width/2-150, height-35)
+    .setPosition(width/2-150, sq_location.y+180)
     .setSize(100, 15)
     .setCaptionLabel("Globale Geschwindigkeit")
     .setRange(0, 100)
@@ -38,6 +38,7 @@ void controller() {
     .setColorActive(color(#FFED5F))
     .setColorValue(color(#6d6d6d))
     .setColorForeground(color(#FFED5F))
+    .setColorBackground(color(#ffffff))
     .setColorLabel(#ffffff)
     ;
 

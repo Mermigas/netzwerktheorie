@@ -38,7 +38,7 @@ boolean sinOn = false;
 PVector sin_location = new PVector(760, 280);
 float duration_sin = 0;
 
-int echoCounter = 0; //counts how often the waves were sent
+int echoCounter = -1; //counts how often the waves were sent
 
 float global_velocity;
 
@@ -104,7 +104,7 @@ void setup() {
   //listen
   oscP5 = new OscP5(this, 12000);
   //send
-  remoteLocation = new NetAddress("255.255.255.255", 12000);
+  remoteLocation = new NetAddress("255.255.255.255", 12001);
 
   ipAdresses = new StringList();
 
@@ -150,8 +150,8 @@ void draw() {
   //interface element: sending status
   sendingSignal();
 
-  //get global velocity
-  global_velocity = cp5.getController("global_velocity").getValue();
+  //send globalVelocity
+  sendVelocity();
 
   //Text for the controllers
   fill(255);
@@ -197,16 +197,18 @@ void draw() {
   line(0, sq_location.y+215, width, sq_location.y+215);
 
   //Display the clients
+  screens.clear();
   for (int i = 0; i < ipAdresses.size(); i++) {
     screens.add(new Screen(i));
   }
+  
   for (int i = 0; i < ipAdresses.size(); i++) {
     Screen s = screens.get(i);
     s.display();
     s.detectCollision();
   }
 
-  println(echoCounter);
+  println(ipAdresses.size());
 
   /* DRAW END */
 }
@@ -218,15 +220,17 @@ void controlEvent(ControlEvent theControlEvent) {
   if (theControlEvent.getController().getName().equals("send")) {
     senden = true;
     //if "senden" is clicked --> sendData() once!
-    sendData();
     if (squareOn == true) {
       echoCounter++;
+      sendData();
     }
     if (sawOn == true) {
       echoCounter++;
+      sendData();
     }
     if (sinOn == true) {
       echoCounter++;
+      sendData();
     }
   }
 }

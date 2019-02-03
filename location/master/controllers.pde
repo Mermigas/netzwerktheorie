@@ -33,7 +33,7 @@ void controller() {
     .setPosition(width/2-150, sq_location.y+180)
     .setSize(100, 15)
     .setCaptionLabel("Globale Geschwindigkeit")
-    .setRange(0, 100)
+    .setRange(0, 1)
     .setValue(100)
     .setColorActive(color(#FFED5F))
     .setColorValue(color(#6d6d6d))

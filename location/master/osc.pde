@@ -27,7 +27,6 @@ void sendData() {
     sendData.add(duration_sq); //time (how long should it send) #5
     sendData.add(echoCounter); //counter #6
     oscP5.send(sendData, remoteLocation);
-    
   }
   if (sawOn == true) {
     sendData.add(adressedId); //The id to which you should send it #0
@@ -49,6 +48,15 @@ void sendData() {
     sendData.add(echoCounter); // counter #6
     oscP5.send(sendData, remoteLocation);
   }
+}
+
+void sendVelocity() {
+  //get global velocity
+  global_velocity = cp5.getController("global_velocity").getValue();
+  OscMessage sendData = new OscMessage("/global_velocity");
+  sendData.add(global_velocity);
+  
+  oscP5.send(sendData, remoteLocation);
 }
 
 //listen to client

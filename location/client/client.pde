@@ -1,9 +1,8 @@
 // Necessary imports for communicating via OSC
 import oscP5.*;
 import netP5.*;
-
 import processing.sound.*;
-Sound sound;
+
 // Global instances for communication objects
 OscP5 oscP5;
 NetAddress remoteLocation;
@@ -76,6 +75,9 @@ float xtest;
 float ytest = 0;
 float gtest=100;
 
+//Sounds
+SqrOsc square;
+
 void setup() {
   fullScreen();
  //size(800,600);
@@ -104,8 +106,9 @@ void setup() {
   echo = new ArrayList<EchoSystem>();
 
   //SOUND
-  SinOsc sin = new SinOsc(this);
-  sound = new Sound(this);
+  square = new SqrOsc(this);
+  square.play();
+  square.amp(0);
 
   ellipseMode(CENTER);
 }

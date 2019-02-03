@@ -31,6 +31,12 @@ class EchoSystem {
     timeAfter = 3 * (0.5 * tmpAmp);
     lifetime = tmpTime + timeAfter;
     println("new EchoSystem:" + echoID);
+    
+    //play sound 
+    if (tmpEchoID == ID) {
+      square.freq(tmpFreq);
+      square.amp(tmpAmp);
+    }
   }
 
   void addParticle() {
@@ -48,6 +54,7 @@ class EchoSystem {
   }
   boolean isDead() {
     if (lifetime < 0.0) {
+      square.amp(0);
       return true;
     } else {
       return false;

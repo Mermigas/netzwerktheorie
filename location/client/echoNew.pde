@@ -36,8 +36,22 @@ class EchoSystem {
 
     //play sound 
     if (tmpEchoID == ID) {
-      square.freq(tmpFreq);
-      square.amp(tmpAmp);
+       
+      //play sounds
+      if(tmpType.equals("sinewave")) {
+        sine.freq(tmpFreq);
+        sine.amp(tmpAmp);
+      }
+      
+      if(tmpType.equals("sawtooth")) {
+        saw.freq(tmpFreq);
+        saw.amp(tmpAmp);
+      }
+      
+      if (tmpType.equals("squarewave")) {
+        square.freq(tmpFreq);
+        square.amp(tmpAmp);
+      }
     }
   }
 
@@ -56,7 +70,17 @@ class EchoSystem {
   }
   boolean isDead() {
     if (lifetime < 0.0) {
-      square.amp(0);
+      //mute sounds
+      if(type.equals("sinewave")) {
+        sine.amp(0);
+      }
+      if(type.equals("sawtooth")) {
+        saw.amp(0);
+      }
+      if(type.equals("square")) {
+        square.amp(0);
+      }
+      
       return true;
     } else {
       return false;
@@ -118,7 +142,7 @@ class EchoParticle {
     freq = tmpFreq;
     type = tmpType;
 
-println("PARTICLE: " + type);
+    println("PARTICLE: " + type);
     alpha = 255.0;
     if (!test) {
       println("lifetime: " + lifetime + "OLifeTime: " + oLifetime);
@@ -238,10 +262,10 @@ println("PARTICLE: " + type);
 
     //draw just when object is in monitor position
     if (position.x > positionLeft && position.x < positionRight && position.y > positionTop && position.y < positionBottom) {
-println("display: " + type);
+      println("display: " + type);
       if (type.equals( "squarewave")) {
 
-  println("innerparticlesqaure");
+        println("innerparticlesqaure");
         strokeWeight(1);
         stroke(alpha);
         if (phase) {
@@ -258,10 +282,8 @@ println("display: " + type);
 
 
         ellipse(positionnew[0], positionnew[1], newSize, newSize);
-      }else if (type.equals( "sinewave")) {
-        
-      }else if (type.equals( "sawthooth")) {
-        
+      } else if (type.equals( "sinewave")) {
+      } else if (type.equals( "sawthooth")) {
       }
     }
   }

@@ -78,6 +78,8 @@ float gtest=100;
 
 //Sounds
 SqrOsc square;
+SawOsc saw;
+SinOsc sine;
 
 void setup() {
   fullScreen();
@@ -107,9 +109,19 @@ void setup() {
   echo = new ArrayList<EchoSystem>();
 
   //SOUND
+  sine = new SinOsc(this);
+  sine.play();
+  sine.amp(0);
+  
+  saw = new SawOsc(this);
+  saw.play();
+  saw.amp(0);
+  
   square = new SqrOsc(this);
   square.play();
   square.amp(0);
+  
+  
 
   ellipseMode(CENTER);
 }

@@ -220,6 +220,7 @@ void oscEvent(OscMessage theOscMessage) {
     globalRoomWidthInPx = roomWidth*100*pxPerCm;
     globalRoomHeightInPx = roomHeight*100*pxPerCm;
     maxLaptops = theOscMessage.get(4).intValue();
+    
     //maxLaptops = 20;
   } else if (theOscMessage.checkAddrPattern("/data") == true) {
     int id = theOscMessage.get(0).intValue();
@@ -229,7 +230,10 @@ void oscEvent(OscMessage theOscMessage) {
     float  globalVelocity = theOscMessage.get(4).floatValue();
     float time = theOscMessage.get(5).floatValue();
     int echoID = theOscMessage.get(6).intValue();
+    println("getData");
     drawVisualization(id, type, freq, time, amp, globalVelocity, echoID);
     
+  } else if (theOscMessage.checkAddrPattern("/global_velocity") == true) {
+      timeController = theOscMessage.get(0).floatValue();
   }
 }

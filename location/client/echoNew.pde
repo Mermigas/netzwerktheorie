@@ -8,7 +8,7 @@ class EchoSystem {
   float radius;
   float oLifetime;
   float timeAfter;
-  int particlesPerRound = 300;
+  int particlesPerRound = 500;
   float timer = 0;
   float counter = 1;
   float counterPhase = 0;
@@ -27,9 +27,10 @@ class EchoSystem {
     println("init radius: " + tmpradius + " init2: " + radius);
     particlesPerRound *=  amp;
     oLifetime = tmpTime;
+    
     timeAfter = 3 * (0.5 * tmpAmp);
     lifetime = tmpTime + timeAfter;
-    
+    println("new EchoSystem:" + echoID);
   }
 
   void addParticle() {
@@ -90,6 +91,8 @@ class EchoParticle {
   float freq;
   boolean phase;
   float oRadius;
+  float originalLifeTime;
+  float preFaultTime = 1;
 
   float alphaPerCircle;
 
@@ -102,9 +105,12 @@ class EchoParticle {
     oRadius = radius;
     lifetime = tmpLifetime;
     oLifetime = tmpOLifetime;
+    originalLifeTime = lifetime;
     freq = tmpFreq;
+    
 
     alpha = 255.0;
+    //println("lifetime: " + lifetime + "OLifeTime: " + oLifetime);
     alphaPerCircle = (alpha-bg)/(lifetime-oLifetime);
   }
 
@@ -139,7 +145,8 @@ class EchoParticle {
     }
   }
   void checkForCollision() {
-    for (int i = echo.size()-1; i >= 0; i--) {
+   if (originalLifeTime - lifetime > preFaultTime) {
+        for (int i = echo.size()-1; i >= 0; i--) {
       EchoSystem p = echo.get(i);
       for (int y = p.particles.size()-1; i >=0; i--) {
         EchoParticle eP = p.particles.get(y);
@@ -180,28 +187,30 @@ class EchoParticle {
         }
       }
     }
+   }
+ 
   }
 
   // Method to update position
   void update() {
-    //velocity.add(acceleration);
-    //velocity = velocity.mult(1.2);
-    velocity.x *=  1.1;
-    velocity.y *= 1.1;
 
-    //velocity.x = mapSize(velocity.x);
-    //velocity.y = mapSize(velocity.y);
-    // velocity.x *= 1.45;
-    // velocity.y *= 1.3;
-    //velocity = velocity.mult(0.5);
+    velocity.x *=  (1 +  0.05 * timeController);
+    velocity.y *= (1 + 0.05 * timeController);
+
     //checkForEnd();
     position.add(velocity);
-    //println(velocity);
+
     checkForCollision();
     lifetime -= (1/frameRate) * timeController;
     oLifetime -= (1/frameRate) * timeController;
     if (oLifetime < 0) {
-      alpha -= (alphaPerCircle/frameRate) * timeController;
+      if (alpha>bg) {
+        //println(alphaPerCircle/frameRate);
+        alpha -= (alphaPerCircle/frameRate) * timeController;
+      }else {
+       alpha = bg; 
+      }
+      
     }
   }
 
@@ -210,20 +219,23 @@ class EchoParticle {
     strokeWeight(1);
     stroke(alpha);
     if(phase) {
-      println("voll");
+    
       fill(alpha);
     }else {
-      println("leer");
+      
       fill(bg);
     }
-    
-    //println("XPositionXAlt: " + position.x + "positionYAlt: " + position.y);
-    float newSize = mapSizeW(radius);
-    // println("radius: " + radius + "newSize: " + newSize + "int: " + int(newSize));
-    float [] positionnew = mapCordinates(position.x, position.y);
-    //println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);
-
-    ellipse(positionnew[0], positionnew[1], newSize, newSize);
+    //draw just when object is in monitor position
+    //println(positionLeft +" < " + position.x + " > " + positionRight);
+      if (position.x > positionLeft && position.x < positionRight && position.y > positionTop && position.y < positionBottom) {
+      //println("XPositionXAlt: " + position.x + "positionYAlt: " + position.y);
+      float newSize = mapSizeW(radius);
+      // println("radius: " + radius + "newSize: " + newSize + "int: " + int(newSize));
+      float [] positionnew = mapCordinates(position.x, position.y);
+      //println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);
+      
+      ellipse(positionnew[0], positionnew[1], newSize, newSize);
+    }
     
   }
 

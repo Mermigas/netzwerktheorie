@@ -89,7 +89,7 @@ void drawVisualization (int tmpID, String tmpType, Float tmpFreq, float time, Fl
   //float [] positionMapped = mapCordinates(position[0], position[1]);
   //println("xEchoMapped: " + position[0] + " yEchoMapped: " + position[1]);
   println("add a new system");
-  echo.add(new EchoSystem(position[0], position[1], tmpFreq, 10, tmpAmp, tmpType, time, tmpEchoID));
+  echo.add(new EchoSystem(position[0], position[1], tmpFreq, 20, tmpAmp, tmpType, time, tmpEchoID));
   //play sound 
   if (tmpID == ID){
     //sin.play(tmpFreq, tmpAmp);

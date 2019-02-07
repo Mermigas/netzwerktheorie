@@ -69,7 +69,7 @@ boolean ipMatchId = false;
 
 float timer; //timer to kill all ids
 
-int numComputers = 10;
+int numComputers = 8;
 
 boolean isOver = false;
 
@@ -89,6 +89,7 @@ ControlFont font_b;
 ArrayList<EchoSystem> echo;
 int displayVX, displayVY, displayVW, displayVH;
 color bg = color(42);
+boolean displayClicked = false;
 
 float freq;
 float amp;
@@ -104,7 +105,7 @@ void setup() {
   //listen
   oscP5 = new OscP5(this, 12000);
   //send
-  remoteLocation = new NetAddress("255.255.255.255", 12000);
+  remoteLocation = new NetAddress("255.255.255.255", 12001);
 
   ipAdresses = new StringList();
 
@@ -198,17 +199,24 @@ void draw() {
 
   //Display the clients
   screens.clear();
-  for (int i = ipAdresses.size() - 1; i >= 0 ; i--) {
+  for (int i = 0; i < ipAdresses.size(); i++) {
     screens.add(new Screen(i));
   }
 
-  for (int i = ipAdresses.size() - 1; i >= 0 ; i--) {
+  for (int i = 0; i < ipAdresses.size(); i++) {
     Screen s = screens.get(i);
     s.display();
     s.detectCollision();
+    if (displayClicked) {
+      s.laptopColor = color(#FFED5F);
+    } else {
+      s.laptopColor = color(0);
+    }
   }
 
-  println(echoCounter);
+  println(adressedId);
+
+
 
   /* DRAW END */
 }
@@ -262,13 +270,13 @@ void killIds() {
 
 //get ip adressed
 void mousePressed() {
-  for (int i = ipAdresses.size() - 1; i >= 0 ; i--) {
+  for (int i = 0; i < ipAdresses.size(); i++) {
     Screen s = screens.get(i);
     if (s.detectCollision()) {
       adressedId = i;
-      s.laptopColor = color(#FFED5F);
+      displayClicked = true;
     } else {
-      s.laptopColor = color(0);
+      displayClicked = false;
     }
   }
 }

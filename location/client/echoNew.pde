@@ -14,10 +14,11 @@ class EchoSystem {
   float counterPhase = 0;
   boolean phase = true;
   String type;
+  int clientID;
 
 
 
-  EchoSystem(float tmpX, float tmpY, float tmpFreq, float tmpradius, float tmpAmp, String tmpType, float tmpTime, int tmpEchoID) {
+  EchoSystem(float tmpX, float tmpY, float tmpFreq, float tmpradius, float tmpAmp, String tmpType, float tmpTime, int tmpEchoID, int tmpClientID) {
     origin = new PVector(tmpX, tmpY);
     particles = new ArrayList<EchoParticle>();
     freq = tmpFreq;
@@ -32,9 +33,10 @@ class EchoSystem {
     timeAfter = 3 * (0.5 * tmpAmp);
     lifetime = tmpTime + timeAfter;
  
+    clientID = tmpClientID;
 
     //play sound 
-    if (tmpEchoID == ID) {
+    if (clientID == ID) {
 
       //play sounds
       if (tmpType.equals("sinewave")) {
@@ -64,7 +66,7 @@ class EchoSystem {
   boolean isDead() {
     if (lifetime < 0.0) {
       //mute sounds
-      if (echoID == ID ) {
+      if (clientID == ID ) {
         if (type.equals("sinewave")) {
           sine.amp(0);
         } else if (type.equals("sawtooth")) {
@@ -280,10 +282,14 @@ class EchoParticle {
         float [] positionnew = mapCordinates(position.x, position.y);
         //println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);
 
-
         ellipse(positionnew[0], positionnew[1], newSize, newSize);
+        
       } else if (type.equals( "squarewave")) {
+        
+        
       } else if (type.equals( "sawthooth")) {
+        
+        
       }
     }
   }

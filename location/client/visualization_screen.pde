@@ -59,10 +59,10 @@ void getPositionInRoom() {
   //laptopYInCoordinateY = mapSizeH(laptopYInCoordinateY);
   //println("positionRight:" +  positionRight);
   float[] positionTest  = mapCordinates(positionRight, positionBottom);
-  println("mapping: " + positionTest[0] + " " + positionTest[1] + " height: " + height );
+  //println("mapping: " + positionTest[0] + " " + positionTest[1] + " height: " + height );
   float mapvoll =  (-positionTop*laptopPXInCoordinatePX)+(roomHeight*100*pxPerCm*laptopPXInCoordinatePX);
   float mapnull = -positionTop*laptopPXInCoordinatePX;
-  println("roomheighinpx:" + roomHeight*100*pxPerCm + "map0: " + mapnull + "mapvoll: " + mapvoll); 
+  //println("roomheighinpx:" + roomHeight*100*pxPerCm + "map0: " + mapnull + "mapvoll: " + mapvoll); 
 }
 float[] mapCordinates(float x, float y) {
   float eins = -positionTop * laptopPXInCoordinatePX;
@@ -99,8 +99,8 @@ void drawVisualization (int tmpID, String tmpType, Float tmpFreq, float time, Fl
   float [] position = getPositionInRoomByID(tmpID);
   //float [] positionMapped = mapCordinates(position[0], position[1]);
   //println("xEchoMapped: " + position[0] + " yEchoMapped: " + position[1]);
-  println("add a new system");
-  echo.add(new EchoSystem(position[0], position[1], tmpFreq, 20, tmpAmp, tmpType, time, tmpEchoID));
+  //println("add a new system");
+  echo.add(new EchoSystem(position[0], position[1], tmpFreq, 20, tmpAmp, tmpType, time, tmpEchoID, tmpID));
  }
 //println("tempID: " +tmpID);
 }

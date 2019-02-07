@@ -8,7 +8,7 @@ class EchoSystem {
   float radius;
   float oLifetime;
   float timeAfter;
-  int particlesPerRound = 200;
+  int particlesPerRound = 100;
   float timer = 0;
   float counter = 1;
   float counterPhase = 0;

@@ -82,13 +82,13 @@ SawOsc saw;
 SinOsc sine;
 
 void setup() {
- fullScreen();
- //size(800,600);
+  //fullScreen();
+ size(800,600);
   //FONTS
   light = createFont("Montserrat-Light.ttf", 32);
   light20 = createFont("Montserrat-Light.ttf", 20);
 
-  ID = -1;
+  //ID = -1;
   //NETWORK
   // Listen on port 12000
   oscP5 = new OscP5(this, 12001);
@@ -132,17 +132,6 @@ void draw() {
     if (fade<255) {
       fade += 1;
     }
-    if (testMode) {
-      ID = 3;
-      background(bg);
-      gtest++;
-      getPositionInRoom ();
-      float[] position = mapCordinates(40000, 300);
-      //fill(0);
-      //ellipse(position[0], position[1], gtest*10, gtest*10);
-      
-    } else {
-      //ID=2;
       getPositionInRoom ();
       background(bg);
       for (int i = echo.size()-1; i >= 0; i--) {
@@ -152,7 +141,7 @@ void draw() {
         echo.remove(i);
       }
     }
-    }
+    
 
   }
 
@@ -187,7 +176,6 @@ void draw() {
     if (millis()>(d*1000*sendAliveCounter)) {
       sendAliveCounter++;
       sendAlive();
-      //println("sendAlive");
     }
   }
 
@@ -246,7 +234,7 @@ void oscEvent(OscMessage theOscMessage) {
     float  globalVelocity = theOscMessage.get(4).floatValue();
     float time = theOscMessage.get(5).floatValue();
     int echoID = theOscMessage.get(6).intValue();
-    println("getData");
+    println("getData for id: " + id + "width echo id: " + echoID);
     drawVisualization(id, type, freq, time, amp, globalVelocity, echoID);
     
   } else if (theOscMessage.checkAddrPattern("/global_velocity") == true) {

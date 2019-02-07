@@ -8,7 +8,7 @@ class EchoSystem {
   float radius;
   float oLifetime;
   float timeAfter;
-  int particlesPerRound = 100;
+  int particlesPerRound = 50;
   float timer = 0;
   float counter = 1;
   float counterPhase = 0;
@@ -36,18 +36,18 @@ class EchoSystem {
 
     //play sound 
     if (tmpEchoID == ID) {
-       
+
       //play sounds
-      if(tmpType.equals("sinewave")) {
+      if (tmpType.equals("sinewave")) {
         sine.freq(tmpFreq);
         sine.amp(tmpAmp);
       }
-      
-      if(tmpType.equals("sawtooth")) {
+
+      if (tmpType.equals("sawtooth")) {
         saw.freq(tmpFreq);
         saw.amp(tmpAmp);
       }
-      
+
       if (tmpType.equals("squarewave")) {
         square.freq(tmpFreq);
         square.amp(tmpAmp);
@@ -71,16 +71,15 @@ class EchoSystem {
   boolean isDead() {
     if (lifetime < 0.0) {
       //mute sounds
-      if(type.equals("sinewave")) {
-        sine.amp(0);
+      if (echoID == ID ) {
+        if (type.equals("sinewave")) {
+          sine.amp(0);
+        } else if (type.equals("sawtooth")) {
+          saw.amp(0);
+        } else if (type.equals("square")) {
+          square.amp(0);
+        }
       }
-      if(type.equals("sawtooth")) {
-        saw.amp(0);
-      }
-      if(type.equals("square")) {
-        square.amp(0);
-      }
-      
       return true;
     } else {
       return false;
@@ -263,10 +262,10 @@ class EchoParticle {
 
     //draw just when object is in monitor position
     if (position.x > positionLeft && position.x < positionRight && position.y > positionTop && position.y < positionBottom) {
-      
+
       if (type.equals( "sinewave")) {
 
-       
+
         strokeWeight(1);
         stroke(alpha);
         if (phase) {

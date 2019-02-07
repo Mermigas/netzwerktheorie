@@ -91,7 +91,7 @@ void setup() {
   ID = -1;
   //NETWORK
   // Listen on port 12000
-  oscP5 = new OscP5(this, 12000);
+  oscP5 = new OscP5(this, 12001);
   remoteLocation = new NetAddress("255.255.255.255", 12000);
   ownNetworkAddress = NetInfo.getHostAddress();
   rectMode(CENTER);

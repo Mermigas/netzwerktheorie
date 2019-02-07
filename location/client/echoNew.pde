@@ -93,7 +93,7 @@ class EchoSystem {
     oLifetime -= (1/frameRate) * timeController;
 
 
-    float tmpFreq = 1/(freq/200);
+    float tmpFreq = 1/(freq/100);
     if (timer>counter*tmpFreq) {
 
       counter++;
@@ -143,7 +143,8 @@ class EchoParticle {
     type = tmpType;
 
     println("PARTICLE: " + type);
-    alpha = 255.0;
+    alpha = map(freq, 20, 300, bgFloat, 255);
+    //alpha = 255.0;
     if (!test) {
       println("lifetime: " + lifetime + "OLifeTime: " + oLifetime);
       println(lifetime-oLifetime);

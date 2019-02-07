@@ -205,16 +205,13 @@ void draw() {
 
   for (int i = 0; i < ipAdresses.size(); i++) {
     Screen s = screens.get(i);
-    s.display();
-    s.detectCollision();
-    if (displayClicked) {
+   
+    if (adressedId == i) {
       s.laptopColor = color(#FFED5F);
-    } else {
-      s.laptopColor = color(0);
     }
+     s.display();
   }
 
-  println(adressedId);
 
 
 

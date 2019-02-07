@@ -82,7 +82,7 @@ SawOsc saw;
 SinOsc sine;
 
 void setup() {
-  fullScreen();
+ fullScreen();
  //size(800,600);
   //FONTS
   light = createFont("Montserrat-Light.ttf", 32);

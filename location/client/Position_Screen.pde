@@ -41,7 +41,6 @@ void drawCorners(float tmpX, float tmpY, float tmpW, float tmpH) {
 }
 void drawLaptop(int laptopID, boolean visibilityState) {
   color laptopColor;
-  //print(laptopID);
   if (visibilityState) {
     counterAnimateLaptop += 0.05;
     int lv = int(map(sin(counterAnimateLaptop), -1, 1, 30, 255));
@@ -51,6 +50,7 @@ void drawLaptop(int laptopID, boolean visibilityState) {
   }
   float[] position = getLaptopPosition(laptopID);
   stroke(laptopColor);
+  strokeWeight(1);
   drawCorners(position[0], position[1], laptopWidth, laptopHeight);
 }
 

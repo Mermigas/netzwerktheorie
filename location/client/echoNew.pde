@@ -24,15 +24,14 @@ class EchoSystem {
     amp = tmpAmp;
     echoID = tmpEchoID;
     radius = tmpAmp * tmpradius;
-    println("tmpAmp: " + tmpAmp);
-    println("init radius: " + tmpradius + " init2: " + radius);
+  
     particlesPerRound *=  amp;
     oLifetime = tmpTime;
     type = tmpType;
 
     timeAfter = 3 * (0.5 * tmpAmp);
     lifetime = tmpTime + timeAfter;
-    println("new EchoSystem:" + echoID);
+ 
 
     //play sound 
     if (tmpEchoID == ID) {
@@ -56,12 +55,6 @@ class EchoSystem {
   }
 
   void addParticle() {
-    //phasenveschiebung)
-    if (phase) {
-      phase = false;
-    } else {
-      phase = true;
-    }
 
     for (int i=0; i<particlesPerRound; i++) {
       particles.add(new EchoParticle(origin, i, particlesPerRound, radius, lifetime, oLifetime, freq, phase, type));
@@ -125,7 +118,8 @@ class EchoParticle {
   float originalLifeTime;
   float preFaultTime = 2;
   String type;
-
+  float timer = 0;
+  float counter;
   float alphaPerCircle;
 
   EchoParticle(PVector l, float num, float maxNum, float tmpRadius, float tmpLifetime, float tmpOLifetime, float tmpFreq, boolean tmpPhase, String tmpType) {
@@ -141,9 +135,8 @@ class EchoParticle {
     freq = tmpFreq;
     type = tmpType;
 
-    println("PARTICLE: " + type);
-    alpha = map(freq, 20, 300, bgFloat, 255);
-    //alpha = 255.0;
+    //alpha = map(freq, 20, 300, bgFloat, 255);
+   alpha = 255.0;
     if (!test) {
       println("lifetime: " + lifetime + "OLifeTime: " + oLifetime);
       println(lifetime-oLifetime);
@@ -248,7 +241,6 @@ class EchoParticle {
     oLifetime -= (1/frameRate) * timeController;
     if (oLifetime < 0) {
       if (alpha>bgFloat) {
-        //println(alphaPerCircle/frameRate);
         alpha -= (alphaPerCircle/frameRate) * timeController;
       } else {
         alpha = bgFloat;
@@ -258,20 +250,28 @@ class EchoParticle {
 
   // Method to display
   void display() {
-
+  timer += 1/frameRate * timeController;
 
     //draw just when object is in monitor position
     if (position.x > positionLeft && position.x < positionRight && position.y > positionTop && position.y < positionBottom) {
 
       if (type.equals( "sinewave")) {
-
-
+        float tmpFreq = 1/(freq/100);
+    if (timer>counter*tmpFreq) {
+      counter++;
+      if (phase) {
+       phase = false; 
+      } else {
+       phase = true; 
+      }
+    }
         strokeWeight(1);
+        
         stroke(alpha);
         if (phase) {
           fill(alpha);
         } else {
-          fill(bg);
+          noFill();
         }
 
         //println("XPositionXAlt: " + position.x + "positionYAlt: " + position.y);

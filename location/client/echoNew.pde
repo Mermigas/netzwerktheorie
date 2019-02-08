@@ -61,7 +61,7 @@ class EchoSystem {
     for (int i=0; i<particlesPerRound; i++) {
       particles.add(new EchoParticle(origin, i, particlesPerRound, radius, lifetime, oLifetime, freq, phase, type));
     }
-    counterPhase++;
+    counter++;
   }
   boolean isDead() {
     if (lifetime < 0.0) {
@@ -125,6 +125,10 @@ class EchoParticle {
   float alphaPerCircle;
   boolean fadeOut = false;
 
+  float radius1, radius2, radius3, radius4;
+
+  float freqRect1, freqRect2, freqRect3, freqRect4;
+
   EchoParticle(PVector l, float num, float maxNum, float tmpRadius, float tmpLifetime, float tmpOLifetime, float tmpFreq, boolean tmpPhase, String tmpType) {
 
     velocity = new PVector(sin(map(num, 0, maxNum, 0, 2*PI)), cos(map(num, 0, maxNum, 0, 2*PI)));
@@ -137,6 +141,15 @@ class EchoParticle {
     originalLifeTime = lifetime;
     freq = tmpFreq;
     type = tmpType;
+
+    freqRect1 = freq-3*25;
+    freqRect2 = freq-1*25;
+    freqRect4 = freq+3*25;
+    freqRect3 = freq+1*25;
+    radius1 = radius;
+    radius2 = radius;
+    radius3 = radius;
+    radius4 = radius;
 
     //alpha = map(freq, 20, 300, bgFloat, 255);
     alpha = 255.0;
@@ -162,6 +175,10 @@ class EchoParticle {
       for (int y = p.particles.size()-1; y >=0; y--) {
         EchoParticle eP = p.particles.get(y);
         eP.radius = oRadius;
+        eP.radius1 = oRadius;
+        eP.radius2 = oRadius;
+        eP.radius3 = oRadius;
+        eP.radius4 = oRadius;
       }
     }
   }
@@ -214,15 +231,48 @@ class EchoParticle {
              eP.oLifetime += addLifetime;
              eP.lifetime += addLifetime;
              }*/
-            if (phase == eP.phase) {
-              //Same Phase 
-              float newRadius = radius + eP.radius;
-              radius = newRadius;
-              eP.radius = newRadius;
-            } else {
-              //different Phase
-              radius = 0;
-              eP.radius = 0;
+
+            if (type.equals("sinewave") && eP.type.equals("sinewave")) {
+              if (phase == eP.phase) {
+                //Same Phase 
+                float newRadius = radius + eP.radius;
+                radius = newRadius;
+                eP.radius = newRadius;
+              } else {
+                //different Phase
+                radius = 0;
+                eP.radius = 0;
+              }
+            } else if (type.equals("sinewave") && eP.type.equals("squarewave")) {
+              if (freq > eP.freq-75 && freq < eP.freq+75) {
+
+                //check four freq
+                if (freq > eP.freqRect1 && freq < eP.freqRect1 + 25) {
+                  if (phase == eP.phase) {
+                    //Same Phase 
+                    float newRadius = radius + eP.radius;
+                    //radius = newRadius;
+                    eP.radius1 = newRadius;
+                  } else {
+                    //different Phase
+                    radius = 0;
+                    eP.radius = 0;
+                  }
+                }
+              }
+            } else if (type.equals("sinewave") && eP.type.equals("sawtooth")) {
+            } else if (type.equals("sawtooth") && eP.type.equals("sawtooth")) {
+              if (phase == eP.phase) {
+                //Same Phase 
+                float newRadius = radius + eP.radius;
+                radius = newRadius;
+                eP.radius = newRadius;
+              } else {
+                //different Phase
+                radius = 0;
+                eP.radius = 0;
+              }
+            } else if (type.equals("squarewave") && eP.type.equals("squarewave")) {
             }
           }
         }
@@ -258,17 +308,17 @@ class EchoParticle {
 
     //draw just when object is in monitor position
     if (position.x > positionLeft && position.x < positionRight && position.y > positionTop && position.y < positionBottom) {
-
-      if (type.equals( "sinewave")) {
-        float tmpFreq = 1/(freq/100);
-        if (timer>counter*tmpFreq) {
-          counter++;
-          if (phase) {
-            phase = false;
-          } else {
-            phase = true;
-          }
+      float tmpFreq = 1/(freq/100);
+      if (timer>counter*tmpFreq) {
+        counter++;
+        if (phase) {
+          phase = false;
+        } else {
+          phase = true;
         }
+      }
+      if (type.equals( "sinewave")) {
+
         strokeWeight(1);
 
         stroke(alpha);
@@ -288,7 +338,8 @@ class EchoParticle {
 
         ellipse(positionnew[0], positionnew[1], newSize, newSize);
       } else if (type.equals( "squarewave")) {
-          strokeWeight(1);
+        //println("innerSquare");
+        strokeWeight(1);
 
         stroke(alpha);
         if (phase) {
@@ -301,11 +352,17 @@ class EchoParticle {
         positionnew[0] -= radius/2;
         for ( int i = 1; i<=8; i++) {
           if (i%2 != 0) {
-            rect (positionnew[0]+i*5, positionnew[1], radius/4, radius/4);
+            if (i == 1) {
+              rect (positionnew[0]+i*5, positionnew[1], radius1/4, radius1/4);
+            } else if ( i == 3) {
+              rect (positionnew[0]+i*5, positionnew[1], radius2/4, radius2/4);
+            } else if (i == 5 ) {
+              rect (positionnew[0]+i*5, positionnew[1], radius3/4, radius3/4);
+            } else if  (i == 7) {
+              rect (positionnew[0]+i*5, positionnew[1], radius4/4, radius4/4);
+            }
           }
         }
-        
-        
       } else if (type.equals( "sawtooth")) {
 
 
@@ -331,14 +388,14 @@ class EchoParticle {
           }
         }
         if (phase) {
-          setGradient(int(positionnew[0]-radius/2), int(positionnew[1]-4), radius, 8, fromColor, toColor, X_AXIS);
+          setGradient(int(positionnew[0]-4), int(positionnew[1]-radius/2), 8, radius, fromColor, toColor, Y_AXIS);
           noStroke();
         } else {
+          println("noFill");
           stroke(alpha);
           strokeWeight(1);
           noFill();
         }
-
         rect(positionnew[0], positionnew[1], radius, 8);
       }
     }

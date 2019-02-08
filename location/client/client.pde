@@ -24,6 +24,9 @@ float laptopPXInCoordinatePX;
 float laptopYInCoordinateY;
 float timeController = 1;
 
+int Y_AXIS = 1;
+int X_AXIS = 2;
+
 //NETWORK
 String ownNetworkAddress;
 boolean gotID = false; // ID von Master erhalten
@@ -82,8 +85,8 @@ SawOsc saw;
 SinOsc sine;
 
 void setup() {
-  fullScreen();
- //size(800,600);
+ // fullScreen();
+ size(800,600);
   //FONTS
   light = createFont("Montserrat-Light.ttf", 32);
   light20 = createFont("Montserrat-Light.ttf", 20);
@@ -91,8 +94,8 @@ void setup() {
   //ID = -1;
   //NETWORK
   // Listen on port 12000
-  oscP5 = new OscP5(this, 12000);
-  remoteLocation = new NetAddress("255.255.255.255", 12000);
+  oscP5 = new OscP5(this, 12001);
+  remoteLocation = new NetAddress("255.255.255.255", 12001);
   ownNetworkAddress = NetInfo.getHostAddress();
   rectMode(CENTER);
   smooth();
@@ -186,6 +189,7 @@ void draw() {
     if (millis()>(d*1000*sendHeyCounter)) {
       sendHeyCounter++;
       sendHey();
+      print("hey");
     }
   }
 }
@@ -234,9 +238,8 @@ void oscEvent(OscMessage theOscMessage) {
     float  globalVelocity = theOscMessage.get(4).floatValue();
     float time = theOscMessage.get(5).floatValue();
     int echoID = theOscMessage.get(6).intValue();
-    println("getData for id: " + id + "width echo id: " + echoID);
+    println("getData for id: " + id + "width echo id: " + echoID + "width type:" + type);
     drawVisualization(id, type, freq, time, amp, globalVelocity, echoID);
-    
   } else if (theOscMessage.checkAddrPattern("/global_velocity") == true) {
       timeController = theOscMessage.get(0).floatValue();
   }

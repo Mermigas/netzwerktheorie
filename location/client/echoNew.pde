@@ -25,14 +25,14 @@ class EchoSystem {
     amp = tmpAmp;
     echoID = tmpEchoID;
     radius = tmpAmp * tmpradius;
-  
+
     particlesPerRound *=  amp;
     oLifetime = tmpTime;
     type = tmpType;
 
     timeAfter = 3 * (0.5 * tmpAmp);
     lifetime = tmpTime + timeAfter;
- 
+
     clientID = tmpClientID;
 
     //play sound 
@@ -123,6 +123,7 @@ class EchoParticle {
   float timer = 0;
   float counter;
   float alphaPerCircle;
+  boolean fadeOut = false;
 
   EchoParticle(PVector l, float num, float maxNum, float tmpRadius, float tmpLifetime, float tmpOLifetime, float tmpFreq, boolean tmpPhase, String tmpType) {
 
@@ -138,7 +139,7 @@ class EchoParticle {
     type = tmpType;
 
     //alpha = map(freq, 20, 300, bgFloat, 255);
-   alpha = 255.0;
+    alpha = 255.0;
     if (!test) {
       println("lifetime: " + lifetime + "OLifeTime: " + oLifetime);
       println(lifetime-oLifetime);
@@ -242,6 +243,7 @@ class EchoParticle {
     lifetime -= (1/frameRate) * timeController;
     oLifetime -= (1/frameRate) * timeController;
     if (oLifetime < 0) {
+      fadeOut = true;
       if (alpha>bgFloat) {
         alpha -= (alphaPerCircle/frameRate) * timeController;
       } else {
@@ -252,23 +254,23 @@ class EchoParticle {
 
   // Method to display
   void display() {
-  timer += 1/frameRate * timeController;
+    timer += 1/frameRate * timeController;
 
     //draw just when object is in monitor position
     if (position.x > positionLeft && position.x < positionRight && position.y > positionTop && position.y < positionBottom) {
 
       if (type.equals( "sinewave")) {
         float tmpFreq = 1/(freq/100);
-    if (timer>counter*tmpFreq) {
-      counter++;
-      if (phase) {
-       phase = false; 
-      } else {
-       phase = true; 
-      }
-    }
+        if (timer>counter*tmpFreq) {
+          counter++;
+          if (phase) {
+            phase = false;
+          } else {
+            phase = true;
+          }
+        }
         strokeWeight(1);
-        
+
         stroke(alpha);
         if (phase) {
           fill(alpha);
@@ -278,18 +280,66 @@ class EchoParticle {
 
         //println("XPositionXAlt: " + position.x + "positionYAlt: " + position.y);
         float newSize = mapSizeW(radius);
+
         // println("radius: " + radius + "newSize: " + newSize + "int: " + int(newSize));
         float [] positionnew = mapCordinates(position.x, position.y);
+
         //println("Xpostion-mapped: " + positionnew[0] + "YpositionMapped: " + positionnew[1]);
 
         ellipse(positionnew[0], positionnew[1], newSize, newSize);
-        
       } else if (type.equals( "squarewave")) {
+          strokeWeight(1);
+
+        stroke(alpha);
+        if (phase) {
+          fill(alpha);
+        } else {
+          noFill();
+        }
+        rectMode(CENTER);
+        float [] positionnew = mapCordinates(position.x, position.y);
+        positionnew[0] -= radius/2;
+        for ( int i = 1; i<=8; i++) {
+          if (i%2 != 0) {
+            rect (positionnew[0]+i*5, positionnew[1], radius/4, radius/4);
+          }
+        }
         
         
-      } else if (type.equals( "sawthooth")) {
-        
-        
+      } else if (type.equals( "sawtooth")) {
+
+
+        rectMode(CENTER);
+        float [] positionnew = mapCordinates(position.x, position.y);
+        float gradientMiddle = map(freq, 20, 300, bgFloat+50, 205); 
+
+        int fromColor = int(gradientMiddle) - 50;
+        int toColor = int(gradientMiddle) + 50;
+
+        if (fadeOut) {
+
+          if (fromColor > bgFloat ) {
+            fromColor -= alphaPerCircle;
+          } else {
+            fromColor = int(bgFloat);
+          }
+
+          if (toColor > bgFloat) {
+            toColor -= int(alphaPerCircle);
+          } else {
+            toColor = int(bgFloat);
+          }
+        }
+        if (phase) {
+          setGradient(int(positionnew[0]-radius/2), int(positionnew[1]-4), radius, 8, fromColor, toColor, X_AXIS);
+          noStroke();
+        } else {
+          stroke(alpha);
+          strokeWeight(1);
+          noFill();
+        }
+
+        rect(positionnew[0], positionnew[1], radius, 8);
       }
     }
   }

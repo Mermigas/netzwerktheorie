@@ -71,7 +71,7 @@ class EchoSystem {
           sine.amp(0);
         } else if (type.equals("sawtooth")) {
           saw.amp(0);
-        } else if (type.equals("square")) {
+        } else if (type.equals("squarewave")) {
           square.amp(0);
         }
       }
@@ -261,6 +261,8 @@ class EchoParticle {
                 }
               }
             } else if (type.equals("sinewave") && eP.type.equals("sawtooth")) {
+              
+              
             } else if (type.equals("sawtooth") && eP.type.equals("sawtooth")) {
               if (phase == eP.phase) {
                 //Same Phase 
@@ -377,12 +379,13 @@ class EchoParticle {
 
           if (fromColor > bgFloat ) {
             fromColor -= alphaPerCircle;
+            println("alphaPerCircle" + alphaPerCircle);
           } else {
             fromColor = int(bgFloat);
           }
 
           if (toColor > bgFloat) {
-            toColor -= int(alphaPerCircle);
+            toColor -= alphaPerCircle;
           } else {
             toColor = int(bgFloat);
           }
@@ -391,7 +394,7 @@ class EchoParticle {
           setGradient(int(positionnew[0]-4), int(positionnew[1]-radius/2), 8, radius, fromColor, toColor, Y_AXIS);
           noStroke();
         } else {
-          println("noFill");
+          //println("noFill");
           stroke(alpha);
           strokeWeight(1);
           noFill();

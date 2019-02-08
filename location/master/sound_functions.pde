@@ -3,10 +3,10 @@
 //Function to turn on/off squarewave
 void sq_OnOff(boolean on) {
   if (on == true) {
-    //square.play();
     squareOn = true;
+    toggle_2.setState(false);
+    toggle_3.setState(false);
   } else {
-    square.stop();
     squareOn = false;
     duration_sq = 0; //set duration to 0 so duration will be send if wave is off
   }
@@ -14,10 +14,10 @@ void sq_OnOff(boolean on) {
 
 void sw_OnOff(boolean on) {
   if (on == true) {
-    //saw.play();
     sawOn = true;
+    toggle_1.setState(false);
+    toggle_3.setState(false);
   } else {
-    //saw.stop();
     sawOn = false;
     duration_sw = 0; //set duration to 0 so duration will be send if wave is off
   }
@@ -25,10 +25,10 @@ void sw_OnOff(boolean on) {
 
 void sin_OnOff(boolean on) {
   if (on == true) {
-    //sin.play();
     sinOn = true;
+    toggle_1.setState(false);
+    toggle_2.setState(false);
   } else {
-    //sin.stop();
     sinOn = false;
     duration_sin = 0; //set duration to 0 so duration will be send if wave is off
   }

@@ -25,17 +25,17 @@ color sendingStateColor = color(#FFED5F);
 //different controllers
 SqrOsc square;
 boolean squareOn = false;
-PVector sq_location = new PVector(760, 270);
+PVector sq_location = new PVector(910, 270);
 float duration_sq = 0;
 
 SawOsc saw;
 boolean sawOn = false;
-PVector sw_location = new PVector(470, 270);
+PVector sw_location = new PVector(620, 270);
 float duration_sw = 0;
 
 SinOsc sin;
 boolean sinOn = false;
-PVector sin_location = new PVector(180, 270);
+PVector sin_location = new PVector(330, 270);
 float duration_sin = 0;
 
 int echoCounter = -1; //counts how often the waves were sent
@@ -97,13 +97,20 @@ float amp;
 
 ArrayList <Screen> screens;
 
+boolean Toggle_1State;
+boolean Toggle_2State;
+boolean Toggle_3State;
+
+int Y_AXIS = 1;
+int X_AXIS = 2;
+
 void setup() {
-  size(1200, 850);
-  //fullScreen();
+  //size(1200, 850);
+  fullScreen();
 
   /*** OSC ***/
   //listen
-  oscP5 = new OscP5(this, 12000);
+  oscP5 = new OscP5(this, 12001);
   //send
   remoteLocation = new NetAddress("255.255.255.255", 12001);
 
@@ -137,7 +144,12 @@ void setup() {
 
 void draw() {
   /* DRAW BEGIN */
-  background(#404040);
+  background(42);
+
+  //get Toggle States
+  Toggle_1State = toggle_1.getState();
+  Toggle_2State = toggle_2.getState();
+  Toggle_3State = toggle_3.getState();
 
   //Call the waves
   squareFunction();
@@ -190,6 +202,20 @@ void draw() {
       p.amp = sineFunction()[1];
       p.run();
     }
+  } else if (sawOn) {
+    for (int i = echo.size()-1; i >= 0; i--) {
+      EchoSystem p = echo.get(i);
+      p.freq = sawFunction()[0];
+      p.amp = sawFunction()[1];
+      p.run();
+    }
+  } else if (squareOn) {
+    for (int i = echo.size()-1; i >= 0; i--) {
+      EchoSystem p = echo.get(i);
+      p.freq = squareFunction()[0];
+      p.amp = squareFunction()[1];
+      p.run();
+    }
   }
 
   //seperators
@@ -205,16 +231,12 @@ void draw() {
 
   for (int i = 0; i < ipAdresses.size(); i++) {
     Screen s = screens.get(i);
-   
+      s.laptopColor = color(255);
     if (adressedId == i) {
       s.laptopColor = color(#FFED5F);
     }
-     s.display();
+    s.display();
   }
-
-
-
-
   /* DRAW END */
 }
 
@@ -242,7 +264,7 @@ void controlEvent(ControlEvent theControlEvent) {
 
 //This function creates the duration and sends the value
 void duration(float durationWave) {
-  time = time + 1/frameRate;
+  time = time + 1/frameRate * global_velocity;
 
   if (time >= durationWave) {
     senden = false;

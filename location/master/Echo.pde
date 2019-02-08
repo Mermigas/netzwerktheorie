@@ -4,7 +4,7 @@ class EchoSystem {
   float freq, amp;
   int echoID;
   float radius;
-  int particlesPerRound = 300;
+  int particlesPerRound = 150;
   float counter = 1;
   float counterPhase = 0;
   boolean phase = true;
@@ -83,23 +83,53 @@ class EchoParticle {
     position.add(velocity);
   }
 
-  // Method to display
   void display() {
-    strokeWeight(1);
-    stroke(alpha);
-    if (phase) {
-      fill(alpha);
-    } else {
-      fill(bg);
-    }
+    if (sinOn) {
+      strokeWeight(1);
+      stroke(alpha);
+      if (phase) {
+        fill(alpha);
+      } else {
+        noFill();
+      }
 
-    //println("XPositionXAlt: " + position.x + "positionYAlt: " + position.y);
-    float newSize = radius;
-    // println("radius: " + radius + "newSize: " + newSize + "int: " + int(newSize));
-    //println(position.x + " " + position.y);
-    ellipse(position.x, position.y, newSize, newSize);
-    //ellipse(position.x + 10, position.y, newSize, newSize);
-    //ellipse(position.x - 10, position.y, newSize, newSize);
+      float newSize = radius;
+      ellipse(position.x, position.y, newSize, newSize);
+    } else if (sawOn) {
+      rectMode(CENTER);
+      float gradientMiddle = map(freq, 20, 300, 50, 205); 
+
+      int fromColor = int(gradientMiddle) - 50;
+      int toColor = int(gradientMiddle) + 50;
+
+      if (phase) {
+        setGradient(int(position.x-radius/2), int(position.y-4), radius, 8, fromColor, toColor, X_AXIS);
+        noStroke();
+      } else {
+        stroke(alpha);
+        strokeWeight(1);
+        noFill();
+      }
+
+      rect(position.x, position.y, radius, 8);
+    } else if (squareOn) {
+      strokeWeight(1);
+
+      stroke(alpha);
+      if (phase) {
+        fill(alpha);
+      } else {
+        noFill();
+      }
+      rectMode(CENTER);
+      
+      float positionNew = position.x - radius/2;
+      for ( int i = 1; i<=8; i++) {
+        if (i%2 != 0) {
+          rect (positionNew +i*5, position.y, radius/4, radius/4);
+        }
+      }
+    }
   }
 
   // Is the particle still useful?
@@ -108,6 +138,27 @@ class EchoParticle {
       return true;
     } else {
       return false;
+    }
+  }
+}
+
+void setGradient(int x, int y, float w, float h, color c1, color c2, int axis ) {
+
+  noFill();
+
+  if (axis == Y_AXIS) {  // Top to bottom gradient
+    for (int i = y; i <= y+h; i++) {
+      float inter = map(i, y, y+h, 0, 1);
+      color c = lerpColor(c1, c2, inter);
+      stroke(c);
+      line(x, i, x+w, i);
+    }
+  } else if (axis == X_AXIS) {  // Left to right gradient
+    for (int i = x; i <= x+w; i++) {
+      float inter = map(i, x, x+w, 0, 1);
+      color c = lerpColor(c1, c2, inter);
+      stroke(c);
+      line(i, y, i, y+h);
     }
   }
 }

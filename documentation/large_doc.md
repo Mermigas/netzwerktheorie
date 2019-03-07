@@ -2,6 +2,7 @@
 
 ## Struktur dieses Dokuments
 * [Beschreibung des Projekts](#description)
+    - [Schall](#physics)
 * [Technische Details](#techdetails)
 
 
@@ -11,6 +12,17 @@ Mittels eines Interfaces, ist es möglich simple Waveforms zu erstellen, deren F
 In Abhängigkeit der generierten Parameter, wird von dem versendeten Signal eine Visualisierung des Schals erstellt.
 Der Aufbau enthält die Anordnung der Laptops in einer gegebenen Position. Dadurch kennt jeder Client seine Position im Raum.
 Dies ermöglicht der Visualisierung sich über alles Laptops zu zeichnen. Ein Gesamtbild entsteht.
+
+#### Schall <a name="physics"></a>
+Als Grundlage unserer Visualisierung nahmen wir den Schall und seinen Hintergrund innerhalb der Physik. Dabei wollten wir zwar diesen abstraktdarstellen, doch auch mit einer realistischen, auf den Physikalischen Gesetzten, beruhenden Basis.
+Hierbei war uns wichtig, dass diese aufgestellten Regeln erkennbar seien, aber nicht den Fokus von der bestehenden abstrakten Gestaltung fortnahmen.
+Einer der prägnantesten Idee, die man bei unserer Darstellung unserer Installation erkennen konnte, ist die der Interferenz. Diese, in der Physik angesiedelte, Bezeichnung beschreibt genau, wie die Amplitude sich verändert, falls eine Überlagerung zwischen zwei oder mehreren Schallwellen vorliegt.
+Jedoch ist dieser Begriff nicht nur auf reine Schallwellen anwendbar, sondern auch auf andere Wellen, wie zum Beispiel Licht- und Materiewellen.
+Aufgrund des speziellen Kursthemas, haben wir uns aber nur mit den Schallwellen, also dem Sound, befasst und dies mit, vor allem, der destruktiven Interferenz gepaart.
+Dies kann man in unserer Visualisierung insoweit sehen, als genau wie bei der Physikalischen destruktiven Interferenz, zwei Punkte – unsere Darstellung der Waves – sich auslöschen, sollten sie eine gleiche negative Amplitude teilen.
+Teilen sie sich jedoch eine positive, so beschleunigen sie sich.
+Dabei ist es egal, ob der Master eine Sinus- oder eine Saw-Wave zu einem der vorhandenen Clients gesendet hat. Punkte jeglicher, von uns festgelegten, Wave-Arten interagieren in unserer Installation mit jeweils Punkten der Anderen in der gleichen festgelegten Weise.
+
 
 ### Technische Details <a name="techdetails"></a>
 

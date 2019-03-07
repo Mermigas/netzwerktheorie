@@ -54,7 +54,7 @@ float time = 0; //time for how long to send
 /* Send/receive stuff with client */
 String hey; //first hey 
 float roomWidth = 3; //roomWidth
-float roomHeight = 4; //roomHeight
+float roomHeight = 3; //roomHeight
 
 String ip; //to handle current ipAdress
 StringList ipAdresses; //List of all ip Adresses
@@ -69,7 +69,7 @@ boolean ipMatchId = false;
 
 float timer; //timer to kill all ids
 
-int numComputers = 8;
+int numComputers = 5;
 
 boolean isOver = false;
 

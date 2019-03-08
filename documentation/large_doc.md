@@ -8,8 +8,8 @@
 
 ### Beschreibung des Projekts <a name="description"></a>
 Schallbild ist eine interaktive Multi-Laptop Installation.
-Mittels eines Interfaces, ist es möglich simple Waveforms zu erstellen, deren Frequenz und Amplitude zuverändern und diese Signal an alle verfügbaren Client Laptops zu verschicken.
-In Abhängigkeit der generierten Parameter, wird von dem versendeten Signal eine Visualisierung des Schals erstellt.
+Mittels eines Interfaces ist es möglich simple Waveforms zu erstellen, deren Frequenz und Amplitude zu verändern und diese Signal an alle verfügbaren Client Laptops zu verschicken.
+In Abhängigkeit der generierten Parameter, wird von dem versendeten Signal eine Visualisierung des Schalls erstellt.
 Der Aufbau enthält die Anordnung der Laptops in einer gegebenen Position. Dadurch kennt jeder Client seine Position im Raum.
 Dies ermöglicht der Visualisierung sich über alles Laptops zu zeichnen. Ein Gesamtbild entsteht.
 
@@ -154,3 +154,84 @@ void sendVelocity() {
 Das Interface des Masters enthält im oberen Bereich einen Vorschaubereich der Visualisierung. Darunter befinden sich drei Osciliatoren mit den eingestellen Waveform "Sinewave", "Sawtooth" und "Squarewave". Hier lassen sich die Parameter mittels Drehreglern Frequenz, Amplitude und Dauer der Sendung einstellen. Im mittleren Teil liegt ein Slider der die globale Geschwindigkeit der Visualisierung steuert. Im unteren Bereich befindet sich der Knopf zur Sendung des eingestellten Signals.
 
 Die Interface-Elemente sind der Library [controlP5](https://github.com/sojamo/controlp5) von Andreas Schlegel entnommen.
+
+#### Client
+
+Im Clientprogramm wird zwischen 3 Zuständen unterschieden: 
+
+1. Warten auf Verbindung
+2. Darstellung der Positionierug im Raum
+3. Die Visualisierung
+
+*Warten auf Verbindung*
+
+Mit dem Start des Programms sendet der Client jede Sekunde eine "hey-Nachricht" an den Master zusammen mit der eigenen IP-Adresse. Dies geschieht solange bis der Client noch keine Zuweisung durch den Masterrechner erhalten hat. 
+
+```
+//send Hey-Message every second
+float d = 1/sendHeyTime;
+if (!gotID && MODE=="CONNECTING") {
+    drawLoading();
+    if (millis()>(d*1000*sendHeyCounter)) {
+      sendHeyCounter++;
+      sendHey();
+    }
+}
+  
+void sendHey() {
+  OscMessage heyMessage = new OscMessage("/hey");
+  heyMessage.add(ownNetworkAddress); 
+  heyMessage.add("hey");
+  oscP5.send(heyMessage, remoteLocation);
+}
+```
+
+*Positionierung im Raum*
+
+Hat der Client seine ID vom Master und die übermittelte Raumgröße erhalten, wird überprüft ob die Höhe oder Breite des Bildschirmes "einschränkend" ist, um die größtmögliche Zeichung des Raumes auf dem Bildschirm zu erreichen. Anhand der ID wird die Position des eigenen Laptops bestimmt und in einer maßstabgetreuen Visualsierung dargestellt, damit ist gewährleitest, dass alle Laptops in der richtigen Position zueinander stehen, was elementar für die spätere synchrone Ausbreitung des Schalls darstellt.
+
+*Visualisierung*
+
+Wurde der Laptop an die passende Stelle positioniert, wartet dieser auf Daten vom Master. Mit einem dieser Datenpakete wird neben der "Schallart", der Dauer, der Amplitude und Frequenz, auch die ID mitgeschickt, auf welcher die Visualisierung starten soll. Anhand dieser ID, kann die Position des Startlaptops im Raum bestimmt werden. Dazu wird in zwei Kooridnatensysteme (das eigene und das des Raumes (global)) unterschieden. Zuerst wird die Position im globalen Koordinatensystem errechnet und zurückgegegeben. 
+
+```
+float[] getPositionInRoomByID(int tmpID) {
+  
+  float roomWidthPx = roomWidth * 100 * pxPerCm;
+  float roomHeightPx = roomHeight * 100 * pxPerCm;
+  float rowHeight = roomHeightPx/(maxLaptops/2+1);
+  float columnWidth = roomWidthPx/(maxLaptops);
+
+  float xMitteRoomPx;
+  float yMitteRoomPx;
+ 
+  if (tmpID%2==0) {
+    //right side and first one
+    xMitteRoomPx = roomWidthPx/2 + columnWidth * int( tmpID/2);
+    yMitteRoomPx =  rowHeight * int( tmpID/2)+ rowHeight/2;
+  } else {
+    //left side
+    xMitteRoomPx = roomWidthPx/2 - columnWidth * (int(tmpID/2)+1);
+    yMitteRoomPx = rowHeight * (int( tmpID/2)+1) + rowHeight/2;
+  }
+   
+  float [] position = {xMitteRoomPx, yMitteRoomPx};
+  return position;
+}
+```
+Im nächsten Schritt wird die errechnete Position des globalen Koordinatensystems auf das eigene Koordinatensystem gemapped. Dafür 
+
+```
+float[] mapCordinates(float x, float y) {
+  float eins = -positionTop * laptopPXInCoordinatePX;
+  float zwei = roomHeight*100*pxPerCm * laptopPXInCoordinatePX;
+  float tmpx = map(x, 0, roomWidth*100*pxPerCm, -positionLeft*laptopPXInCoordinatePX, (-positionLeft*laptopPXInCoordinatePX)+(roomWidth*100*pxPerCm*laptopPXInCoordinatePX)); 
+  float tmpy = map(y, 0, roomHeight*100*pxPerCm, -positionTop*laptopPXInCoordinatePX, eins+zwei); 
+  
+  float[] position = {tmpx, tmpy}; 
+  return(position);
+}
+```
+
+
+

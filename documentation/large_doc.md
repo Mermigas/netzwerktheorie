@@ -27,11 +27,13 @@ Im Falle eines Aufeinandertreffens zweier Partikel derselben Art innerhalb eines
 
 Um die Idee, die wir über die Visualisierungsmöglichkeiten von den verschiedensten Schallwellen hatten, eine größtmögliche Wirkung zu geben, entschieden wir uns früh in einem monochromatischen Raum zu arbeiten. Dabei waren weiß und schwarz innerhalb der Darstellung bei den Client-Laptops nur vorzufinden. Jedoch entschieden wir uns, den Master zwar auch eher grau zu halten, ihm aber gleichzeitig durch die Hinzugabe einer Akzentfarbe von den restlichen Laptops abzuheben. Damit wollten wir eine stärkere Trennlinie zwischen den Clients, die passiv in unserem virtuellen Raum stehen, und die aktive Rolle des Masters setzten. Mit dieser Trennlinie konnten wir auch so eine gewisse Dynanmik innerhalb der Perfomance erzielen. Jeder der Zuschauer und Nutzer unserer Perfomance wusste sofort, welchen Laptop er nutzen musste, um eine gewünschte Reaktion innerhalb des virtuellen Raumes zu erzeugen.
 
-Diese rein technische Visualisierung, wurde durch die Form des Aufbaus noch weiter unterstützt. Hierbei waren wir uns schon sehr früh einig, dass sich eine umgedrehte V-Form am besten dafür eignete, jeden der vielen Bildschirme sehen zu können, sowie die Hauptidee unseres Programmes wiederzugeben. Um dabei noch einen größeren Rahmen des virtuellen Raumes darzustellen, entschieden wir die Höhe der einzelnen Podeste zu unserem Vorteil zu nutzen. Für die Höhe entschieden wir uns für den ersten Laptop, der die Spitze der Form bildete, das höchste Podest zu nehmen. Je weiter die Laptops von der Spitze wegstehen, desto niedriger werden die Podeste. Der Maste bekommt, wie bei der digitalen Visualisierung, sein eigenes Podest. Dieses steht vor der Form, die die Clients bilden, damit sich der Master auch räumlich von den Clients abheben kann.
+Diese rein technische Visualisierung, wurde durch die Form des Aufbaus noch weiter unterstützt. Hierbei waren wir uns schon sehr früh einig, dass sich eine umgedrehte V-Form am besten dafür eignete, jeden der vielen Bildschirme sehen zu können, sowie die Hauptidee unseres Programmes wiederzugeben. Um dabei noch einen größeren Rahmen des virtuellen Raumes darzustellen, entschieden wir die Höhe der einzelnen Podeste zu unserem Vorteil zu nutzen. Für die Höhe entschieden wir uns für den ersten Laptop, der die Spitze der Form bildete, das höchste Podest zu nehmen. Je weiter die Laptops von der Spitze wegstehen, desto niedriger werden die Podeste. Der Master bekommt, wie bei der digitalen Visualisierung, sein eigenes Podest. Dieses steht vor der Form, die die Clients bilden, damit sich der Master auch räumlich von den Clients abheben kann.
 
 
 
 ### Technische Details <a name="techdetails"></a>
+
+Die Kommunikation zwischen den Laptops im Netzwerk wird durch das Netzwerkprotokoll Open Sound Control (kurz OSC) gelöst. Es findet eine bidirektionale Kommunkation zwischen den Clientrechnern und dem Masterrechner statt. Die Clients kommunizieren nicht untereinander. 
 
 #### Master
 
@@ -184,6 +186,7 @@ Im Clientprogramm wird zwischen 3 Zuständen unterschieden:
 
 Mit dem Start des Programms sendet der Client jede Sekunde eine "hey-Nachricht" an den Master zusammen mit der eigenen IP-Adresse.
 Dies geschieht solange, bis der Master den Client seine Zuweisung innerhalb des Raumes geschickt hat.
+
 ```
 //send Hey-Message every second
 float d = 1/sendHeyTime;
@@ -206,7 +209,26 @@ void sendHey() {
 *Positionierung im Raum*
 
 Hat der Client seine ID vom Master und die übermittelte Raumgröße erhalten, wird überprüft ob die Höhe oder Breite des Bildschirmes "einschränkend" ist, um die größtmögliche Zeichnung des Raumes auf dem Bildschirm zu erreichen.
- Anhand der ID wird die Position des eigenen Laptops bestimmt und in einer maßstabgetreuen Visualisierung dargestellt, damit ist gewährleitest, dass alle Laptops in der richtigen Position zueinander stehen, was elementar für die spätere synchrone Ausbreitung des Schalls darstellt.
+
+```
+void drawRoom () {
+  stroke(255);
+  fill(bg);
+  if (width/roomWidth<height/roomHeight) {
+    //Breite ist einschränkend
+    roomHeightInPX = width/roomWidth*roomHeight;
+    roomWidthInPX = width-marginHeight;
+    
+    rect(25, 25, roomWidthInPX, roomHeightInPX );
+  } else {
+    //Höhe ist einschränkend
+    roomWidthInPX = height/roomHeight*roomWidth;
+    roomHeightInPX = height-marginHeight;
+    rect(width/2, height/2, roomWidthInPX, roomHeightInPX);
+  }
+```
+
+Anhand der ID wird die Position des eigenen Laptops bestimmt und in einer maßstabgetreuen Visualisierung dargestellt, damit ist gewährleitest, dass alle Laptops in der richtigen Position zueinander stehen, was elementar für die spätere synchrone Ausbreitung des Schalls im Raum darstellt.
 
 *Visualisierung*
 
@@ -238,7 +260,7 @@ float[] getPositionInRoomByID(int tmpID) {
 }
 ```
 Im nächsten Schritt wird die errechnete Position des globalen Koordinatensystems auf das eigene Koordinatensystem gemapped.
-Dafür
+Dies errechnet jeder Clientrechner selbst. Dafür wird auch die eigene Position im Raum benötigt, die einmalig errechnet wurde. 
 
 ```
 float[] mapCordinates(float x, float y) {
@@ -251,3 +273,13 @@ float[] mapCordinates(float x, float y) {
   return(position);
 }
 ```
+Neben der Position müssen auch die Größen (z.B. Radius) abgelichen werden. Dies nötig, da alle Laptops eine unterschiedliche Auslösung haben können. 
+
+```
+float mapSizeW(float size) {
+  float newSize = size * width/(laptopSizeW * pxPerCm);
+  return(newSize);
+}
+```
+Um die Größe (wie auch die Position im Raum) anzugeleichen wird mit einem einfachen Trick gearbeiet: Es wird mit einer übergreifenenden Laptopgröße und einer festen Auflösung gerechnet, beide werden dann auf die eigene Auflösung gemapped.
+

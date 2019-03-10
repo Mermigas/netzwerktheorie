@@ -4,7 +4,9 @@
 * [Beschreibung des Projektes](#description)
     - [Schall](#physics)
     - [Visualsierung](#looks)
-* [Technische Details] (#techdetails)
+* [Technische Details](#techdetails)
+    - [Master](#master)
+    - [Client](#client)
 
 
 ### Beschreibung des Projekts <a name="description"></a>
@@ -13,6 +15,8 @@ Mittels eines Interfaces ist es möglich simple Waveforms zu erstellen, deren Fr
 In Abhängigkeit der generierten Parameter, wird von dem versendeten Signal eine Visualisierung des Schalls erstellt.
 Der Aufbau enthält die Anordnung der Laptops in einer gegebenen Position. Dadurch kennt jeder Client seine Position im Raum.
 Dies ermöglicht der Visualisierung sich über alles Laptops zu zeichnen. Ein Gesamtbild entsteht.
+
+![](photos/_DSC4996.jpg)
 
 #### Schall <a name="physics"></a>
 Mit dem Kursthema im Hinterkopf, eine Art Orchester mithilfe verschiedener Laptops zu erschaffen, fingen wir an uns über mögliche Herangehensweisen zu unterhalten. Nach längeren Diskussionen entschieden wir uns, als Grundlage unserer Visualisierung das Thema „Schall“ unter Berücksichtigung seiner physikalischen Gesetze zu behandeln. Dabei ist das Ziel sowohl eine abstrakte als auch eine korrekte Darstellung umzusetzen. Die abstrakte Gestaltung der mechanischen Ausbreitung soll dabei jedoch im Fokus stehen.  
@@ -33,9 +37,9 @@ Diese rein technische Visualisierung, wurde durch die Form des Aufbaus noch weit
 
 ### Technische Details <a name="techdetails"></a>
 
-Die Kommunikation zwischen den Laptops im Netzwerk wird durch das Netzwerkprotokoll Open Sound Control (kurz OSC) gelöst. Es findet eine bidirektionale Kommunkation zwischen den Clientrechnern und dem Masterrechner statt. Die Clients kommunizieren nicht untereinander. 
+Die Kommunikation zwischen den Laptops im Netzwerk wird durch das Netzwerkprotokoll Open Sound Control (kurz OSC) gelöst. Es findet eine bidirektionale Kommunkation zwischen den Clientrechnern und dem Masterrechner statt. Die Clients kommunizieren nicht untereinander.
 
-#### Master
+#### Master <a name="master"></a>
 
 *OSC*
 
@@ -172,15 +176,22 @@ Hier lassen sich die Parameter mittels Drehreglern Frequenz, Amplitude und Dauer
 Unter dieser Einstellung der Waveform liegt ein Slider der die globale Geschwindigkeit der Visualisierung steuert.
 Zuletzt kann der Nutzer im untersten Bereich des Interfaces, den Knopf zur endgültigen Sendung des eingestellten Signals benutzten.
 
+![Interface des Masters](photos/_DSC4990.jpg)
+
 Die Interface-Elemente sind der Library [controlP5](https://github.com/sojamo/controlp5) von Andreas Schlegel entnommen.
 
-#### Client
+#### Client <a name="client"></a>
 
 Im Clientprogramm wird zwischen 3 Zuständen unterschieden:
 
 1. Warten auf Verbindung
 2. Darstellung der Positionierung im Raum
 3. Die Visualisierung
+
+\
+![Clients Nahaufnahme](photos/_DSC4966-Bearbeitet.jpg)
+
+
 
 *Warten auf Verbindung*
 
@@ -210,6 +221,8 @@ void sendHey() {
 
 Hat der Client seine ID vom Master und die übermittelte Raumgröße erhalten, wird überprüft ob die Höhe oder Breite des Bildschirmes "einschränkend" ist, um die größtmögliche Zeichnung des Raumes auf dem Bildschirm zu erreichen.
 
+![Positionierung der Computer im Raum](photos/_DSC4999.jpg)
+
 ```
 void drawRoom () {
   stroke(255);
@@ -218,7 +231,7 @@ void drawRoom () {
     //Breite ist einschränkend
     roomHeightInPX = width/roomWidth*roomHeight;
     roomWidthInPX = width-marginHeight;
-    
+
     rect(25, 25, roomWidthInPX, roomHeightInPX );
   } else {
     //Höhe ist einschränkend
@@ -231,6 +244,8 @@ void drawRoom () {
 Anhand der ID wird die Position des eigenen Laptops bestimmt und in einer maßstabgetreuen Visualisierung dargestellt, damit ist gewährleitest, dass alle Laptops in der richtigen Position zueinander stehen, was elementar für die spätere synchrone Ausbreitung des Schalls im Raum darstellt.
 
 *Visualisierung*
+
+![Visulalisierung](photos/_DSC5018.jpg)
 
 Wurde der Laptop an die passende Stelle positioniert, wartet dieser auf Daten vom Master. Mit einem dieser Datenpakete wird neben der "Schallart", der Dauer, der Amplitude und Frequenz, auch die ID mitgeschickt, auf welcher die Visualisierung starten soll. Anhand dieser ID, kann die Position des Startlaptops im Raum bestimmt werden. Dazu wird in zwei Koordinatensysteme (das eigene und das des Raumes (global)) unterschieden. Zuerst wird die Position im globalen Koordinatensystem errechnet und zurückgegeben.
 
@@ -260,7 +275,7 @@ float[] getPositionInRoomByID(int tmpID) {
 }
 ```
 Im nächsten Schritt wird die errechnete Position des globalen Koordinatensystems auf das eigene Koordinatensystem gemapped.
-Dies errechnet jeder Clientrechner selbst. Dafür wird auch die eigene Position im Raum benötigt, die einmalig errechnet wurde. 
+Dies errechnet jeder Clientrechner selbst. Dafür wird auch die eigene Position im Raum benötigt, die einmalig errechnet wurde.
 
 ```
 float[] mapCordinates(float x, float y) {
@@ -273,7 +288,7 @@ float[] mapCordinates(float x, float y) {
   return(position);
 }
 ```
-Neben der Position müssen auch die Größen (z.B. Radius) abgelichen werden. Dies nötig, da alle Laptops eine unterschiedliche Auslösung haben können. 
+Neben der Position müssen auch die Größen (z.B. Radius) abgelichen werden. Dies nötig, da alle Laptops eine unterschiedliche Auslösung haben können.
 
 ```
 float mapSizeW(float size) {
@@ -282,4 +297,3 @@ float mapSizeW(float size) {
 }
 ```
 Um die Größe (wie auch die Position im Raum) anzugeleichen wird mit einem einfachen Trick gearbeiet: Es wird mit einer übergreifenenden Laptopgröße und einer festen Auflösung gerechnet, beide werden dann auf die eigene Auflösung gemapped.
-

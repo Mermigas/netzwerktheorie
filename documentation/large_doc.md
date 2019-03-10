@@ -39,7 +39,7 @@ Diese rein technische Visualisierung, wurde durch die Form des Aufbaus noch weit
 
 *Sinuswelle*
 
-Die Sinuswelle wird durch einen Kreis dargestellt. Dieser ist je nach Phase entweder weiß gefüllt oder hat nur eine weiße Kontor. Die am Master einstellbaren Parameter haben folgende Wirkung:
+Die Sinuswelle wird durch einen Kreis dargestellt. Dieser ist je nach Phase entweder weiß gefüllt oder hat nur eine weiße Kontur. Die am Master einstellbaren Parameter haben folgende Wirkung:
 
 - Amplitude: Bestimmt den Radius des Kreises, die Lautstärke des Sounds und nimmt Einfluss auf die Zeit des Ausfadens nachdem der Sound aufgehört hat zu spielen und auf die Anzahl der Kreispartikel.
 - Frequenz: Je höher die Frequenz, desto geringer ist der Abstand zwischen den einzelnen kreisförmig austrahlenden Wellen. Sie spielt eine Rolle bei der Kollision zweier Wellen und bestimmt die Tonhöhe des Sounds.
@@ -47,7 +47,7 @@ Die Sinuswelle wird durch einen Kreis dargestellt. Dieser ist je nach Phase entw
 
 *Rechteckwelle*
 
-Die Rechteckwelle wird durch vier kleine Rechtecke dargstellt. Diese sind je nach Phase entweder weiß gefüllt oder haben nur eine weiße Kontor. Jedes Rechteck stellt einen gewissen Frequenzbereich dar. Die am Master einstellbaren Parameter haben folgende Wirkung:
+Die Rechteckwelle wird durch vier kleine Rechtecke dargstellt. Diese sind je nach Phase entweder weiß gefüllt oder haben nur eine weiße Kontur. Jedes Rechteck stellt einen gewissen Frequenzbereich dar. Die am Master einstellbaren Parameter haben folgende Wirkung:
 
 - Amplitude: Bestimmt den Größe der Rechtecke, die Lautstärke des Sounds und nimmt Einfluss auf die Zeit des Ausfadens nachdem der Sound aufgehört hat zu spielen und auf die Anzahl der Rechteckgruppen.
 - Frequenz: Je höher die Frequenz, desto geringer ist der Abstand zwischen den einzelnen kreisförmig austrahlenden Wellen. Jedes Rechteck bekommt einen Frequenzbereich von je 25 Hz zugewissen, ausgehend von der übermittelten Frequenz. Sie spielt eine Rolle bei der Kollision zweier Wellen und bestimmt die Tonhöhe des Sounds.
@@ -55,7 +55,7 @@ Die Rechteckwelle wird durch vier kleine Rechtecke dargstellt. Diese sind je nac
 
 *Sägezahnwelle*
 
-Die Sägezahnwelle wird durch ein langes Rechtecke dargstellt. Dieses ist je nach Phase entweder mit einem linearen Verlauf gefüllt oder hat nur eine weiße Kontor. Das Rechteck stellt einen gewissen Frequenzbereich dar. Die am Master einstellbaren Parameter haben folgende Wirkung:
+Die Sägezahnwelle wird durch ein langes Rechtecke dargstellt. Dieses ist je nach Phase entweder mit einem linearen Verlauf gefüllt oder hat nur eine weiße Kontur. Das Rechteck stellt einen gewissen Frequenzbereich dar. Die am Master einstellbaren Parameter haben folgende Wirkung:
 
 - Amplitude: Bestimmt den Größe des Rechtecks, die Lautstärke des Sounds und nimmt Einfluss auf die Zeit des Ausfadens nachdem der Sound aufgehört hat zu spielen und auf die Anzahl der Rechtecke.
 - Frequenz: Je höher die Frequenz, desto geringer ist der Abstand zwischen den einzelnen kreisförmig austrahlenden Wellen. Die Frequnz bestimmt den Start- und Endwert des Grauverlaufs. Sie spielt eine Rolle bei der Kollision zweier Wellen und bestimmt die Tonhöhe des Sounds.
@@ -70,15 +70,15 @@ Der User hat die Möglichkeit die Schallgechwindigkeit mit der "globalen Gewschw
 
 ### Technische Details <a name="techdetails"></a>
 
-Die Kommunikation zwischen den Laptops im Netzwerk wird durch das Netzwerkprotokoll Open Sound Control (kurz OSC) gelöst. Es findet eine bidirektionale Kommunkation zwischen den Clientrechnern und dem Masterrechner statt. Die Clients kommunizieren nicht untereinander.
+Die Kommunikation zwischen den Laptops innerhalb des Netzwerks wird durch das Netzwerkprotokoll Open Sound Control (kurz OSC) gelöst. Es findet eine bidirektionale Kommunkation zwischen den Clientrechnern und dem Masterrechner statt. Die Clients kommunizieren nicht untereinander.
 
 #### Master <a name="master"></a>
 
 *OSC*
 
-Innerhalb des Codes für den Master, kann man die spezielle Raumgröße indivduell angeben. Auch kann man die gesamte Anzahl an Clients
-eintragen und so die Teilnehmeranzahl von Laptops festlegen.
-Im ersten Schritt empfängt der Master die IP Adresse der Clients und trägt sie in eine StringList ein. Dies passiert nur, wenn die IP Adresse noch nicht in der besagten List vorhanden ist.
+Innerhalb des Codes für den Master, kann man die spezielle Raumgröße indivduell angeben. Hinzukommend kann man die gesamte Anzahl an Clients
+eintragen und so die Teilnehmeranzahl der Laptops festlegen.
+Im ersten Schritt empfängt der Master die IP Adresse der Clients und trägt sie in eine StringList ein. Dies passiert nur, wenn die IP Adresse noch nicht in der besagten Liste vorhanden ist.
 
 ```
 //Listen to hey

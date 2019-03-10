@@ -12,19 +12,19 @@
 ### Beschreibung des Projekts <a name="description"></a>
 Schallbild ist eine interaktive Multi-Laptop Installation.
 Mittels eines Interfaces ist es möglich simple Waveforms zu erstellen, deren Frequenz und Amplitude zu verändern und dieses Signal an alle verfügbaren Client Laptops zu verschicken.
-In Abhängigkeit der generierten Parameter, wird von dem versendeten Signal eine Visualisierung des Schalls erstellt.
+In Abhängigkeit der generierten Parameter wird von dem versendeten Signal eine Visualisierung des Schalls erstellt.
 Der Aufbau enthält die Anordnung der Laptops in einer gegebenen Position. Dadurch kennt jeder Client seine Position im Raum.
-Dies ermöglicht der Visualisierung sich über alles Laptops zu zeichnen. Ein Gesamtbild entsteht.
+Dies ermöglicht der Visualisierung sich über alle Laptops zu zeichnen. Ein Gesamtbild entsteht.
 
 ![](photos/_DSC4996.jpg)
 
 #### Schall <a name="physics"></a>
 Mit dem Kursthema im Hinterkopf, eine Art Orchester mithilfe verschiedener Laptops zu erschaffen, fingen wir an uns über mögliche Herangehensweisen zu unterhalten. Nach längeren Diskussionen entschieden wir uns, als Grundlage unserer Visualisierung das Thema „Schall“ unter Berücksichtigung seiner physikalischen Gesetze zu behandeln. Dabei ist das Ziel sowohl eine abstrakte als auch eine korrekte Darstellung umzusetzen. Die abstrakte Gestaltung der mechanischen Ausbreitung soll dabei jedoch im Fokus stehen.  
 
-Unsere Visualisierung der Schwingungen beschränkt sich auf drei primitive Wellenformen, die Sinus-Welle (sine wave), die Rechteck-Welle (square wave) und die Sägezahn-Welle (saw wave). 	
+Unsere Visualisierung der Schwingungen beschränkt sich auf drei primitive Wellenformen, die Sinuswelle (sine wave), die Rechteckwelle (square wave) und die Sägezahnwelle (sawtooth wave). 	
 Es werden pro Phase Partikel entsandt, welche sich kreisförmig ausbreiten. Jede Wellenform hat ihre eigenen Partikel. Somit werden die der Sinus-Welle durch weiße Kreise visualisiert, die der Rechteck-Welle durch jeweils vier weiße Rechtecke und die Sägezahn-Welle durch ein Rechteck mit Farbverlauf von schwarz nach weiß. Die Ausbreitung der Partikel findet kontinuierlich statt, es sei denn, sie prallen von einer der Wände ab oder sie kollidieren miteinander.
-Ausschlaggebend für unsere Visualisierung sind die Interaktionen der Partikel einer Schwingungsart. Beispielsweise interagieren Sinus-Wellen mit Sinus-Wellen, Rechteck-Wellen mit Rechteckwellen und Sägezahn-Wellen mit Sägezahnwellen.
-Im Falle eines Aufeinandertreffens zweier Partikel derselben Art innerhalb eines bestimmten Frequenzbereichs verhalten sich diese abhängig von ihrer Amplitude. Treffen zwei positive Amplituden aufeinander, interferieren diese. Sie überlagern sich. In unserer Visualisierung wird dies beispielsweise durch zwei weiß-gefüllte Kreise (sine wave) symbolisiert, welche sich im Interferenzfall innerhalb des Frequenzbereichs vereinen und vergrößern.  Überlagern sich zwei negative Amplituden, passiert dies mit weiß-konturierten Kreisen. Im Falle einer Kollision eines Partikels mit negativer und eines mit positiver Amplitude erfolgt wie in der Physik eine destruktive Interferenz, das heißt, dass sich die Partikel gegenseitig auslöschen.  
+
+Im Falle eines Aufeinandertreffens zweier Partikel innerhalb eines bestimmten Frequenzbereichs verhalten sich diese abhängig von ihrer Amplitude. Treffen zwei positive Amplituden aufeinander, interferieren diese. Sie überlagern sich. In unserer Visualisierung wird dies beispielsweise durch zwei weiß-gefüllte Kreise (sine wave) symbolisiert, welche sich im Interferenzfall innerhalb des Frequenzbereichs vereinen und vergrößern.  Überlagern sich zwei negative Amplituden, passiert dies mit weiß-konturierten Kreisen. Im Falle einer Kollision eines Partikels mit negativer und eines mit positiver Amplitude erfolgt wie in der Physik eine destruktive Interferenz, das heißt, dass sich die Partikel gegenseitig auslöschen.  
 
 
 ### Visualsierung <a name="looks"></a>
@@ -32,6 +32,37 @@ Im Falle eines Aufeinandertreffens zweier Partikel derselben Art innerhalb eines
 Um die Idee, die wir über die Visualisierungsmöglichkeiten von den verschiedensten Schallwellen hatten, eine größtmögliche Wirkung zu geben, entschieden wir uns früh in einem monochromatischen Raum zu arbeiten. Dabei waren weiß und schwarz innerhalb der Darstellung bei den Client-Laptops nur vorzufinden. Jedoch entschieden wir uns, den Master zwar auch eher grau zu halten, ihm aber gleichzeitig durch die Hinzugabe einer Akzentfarbe von den restlichen Laptops abzuheben. Damit wollten wir eine stärkere Trennlinie zwischen den Clients, die passiv in unserem virtuellen Raum stehen, und die aktive Rolle des Masters setzten. Mit dieser Trennlinie konnten wir auch so eine gewisse Dynanmik innerhalb der Perfomance erzielen. Jeder der Zuschauer und Nutzer unserer Perfomance wusste sofort, welchen Laptop er nutzen musste, um eine gewünschte Reaktion innerhalb des virtuellen Raumes zu erzeugen.
 
 Diese rein technische Visualisierung, wurde durch die Form des Aufbaus noch weiter unterstützt. Hierbei waren wir uns schon sehr früh einig, dass sich eine umgedrehte V-Form am besten dafür eignete, jeden der vielen Bildschirme sehen zu können, sowie die Hauptidee unseres Programmes wiederzugeben. Um dabei noch einen größeren Rahmen des virtuellen Raumes darzustellen, entschieden wir die Höhe der einzelnen Podeste zu unserem Vorteil zu nutzen. Für die Höhe entschieden wir uns für den ersten Laptop, der die Spitze der Form bildete, das höchste Podest zu nehmen. Je weiter die Laptops von der Spitze wegstehen, desto niedriger werden die Podeste. Der Master bekommt, wie bei der digitalen Visualisierung, sein eigenes Podest. Dieses steht vor der Form, die die Clients bilden, damit sich der Master auch räumlich von den Clients abheben kann.
+
+####Darstellung der Parameter
+
+*Sinuswelle*
+
+Die Sinuswelle wird durch einen Kreis dargestellt. Dieser ist je nach Phase entweder weiß gefüllt oder hat nur eine weiße Kontor. Die am Master einstellbaren Parameter haben folgende Wirkung:
+
+- Amplitude: Bestimmt den Radius des Kreises, die Lautstärke des Sounds und nimmt Einfluss auf die Zeit des Ausfadens nachdem der Sound aufgehört hat zu spielen und auf die Anzahl der Kreispartikel.
+- Frequenz: Je höher die Frequenz, desto geringer ist der Abstand zwischen den einzelnen kreisförmig austrahlenden Wellen. Sie spielt eine Rolle bei der Kollision zweier Wellen und bestimmt die Tonhöhe des Sounds.
+- Dauer: Bestimmt wie lange eine Schallwelle visualisiert werden soll. 
+
+*Rechteckwelle*
+
+Die Rechteckwelle wird durch vier kleine Rechtecke dargstellt. Diese sind je nach Phase entweder weiß gefüllt oder haben nur eine weiße Kontor. Jedes Rechteck stellt einen gewissen Frequenzbereich dar. Die am Master einstellbaren Parameter haben folgende Wirkung:
+
+- Amplitude: Bestimmt den Größe der Rechtecke, die Lautstärke des Sounds und nimmt Einfluss auf die Zeit des Ausfadens nachdem der Sound aufgehört hat zu spielen und auf die Anzahl der Rechteckgruppen.
+- Frequenz: Je höher die Frequenz, desto geringer ist der Abstand zwischen den einzelnen kreisförmig austrahlenden Wellen. Jedes Rechteck bekommt einen Frequenzbereich von je 25 Hz zugewissen, ausgehend von der übermittelten Frequenz. Sie spielt eine Rolle bei der Kollision zweier Wellen und bestimmt die Tonhöhe des Sounds.
+- Dauer: Bestimmt wie lange eine Schallwelle visualisiert werden soll. 
+
+*Sägezahnwelle*
+
+Die Sägezahnwelle wird durch ein langes Rechtecke dargstellt. Dieses ist je nach Phase entweder mit einem linearen Verlauf gefüllt oder hat nur eine weiße Kontor. Das Rechteck stellt einen gewissen Frequenzbereich dar. Die am Master einstellbaren Parameter haben folgende Wirkung:
+
+- Amplitude: Bestimmt den Größe des Rechtecks, die Lautstärke des Sounds und nimmt Einfluss auf die Zeit des Ausfadens nachdem der Sound aufgehört hat zu spielen und auf die Anzahl der Rechtecke.
+- Frequenz: Je höher die Frequenz, desto geringer ist der Abstand zwischen den einzelnen kreisförmig austrahlenden Wellen. Die Frequnz bestimmt den Start- und Endwert des Grauverlaufs. Sie spielt eine Rolle bei der Kollision zweier Wellen und bestimmt die Tonhöhe des Sounds.
+- Dauer: Bestimmt wie lange eine Schallwelle visualisiert werden soll. 
+
+*Globale Geschwindigkeit*
+
+Der User hat die Möglichkeit die Schallgechwindigkeit mit der "globalen Gewschwindikeit" zu verlangsamen. Sämtliche Visualisierungen sind von dieser Geschwindigkeit abhängig. Hierdurch werden Detailbetrachtungen möglich gemacht.
+
 
 
 
@@ -45,7 +76,7 @@ Die Kommunikation zwischen den Laptops im Netzwerk wird durch das Netzwerkprotok
 
 Innerhalb des Codes für den Master, kann man die spezielle Raumgröße indivduell angeben. Auch kann man die gesamte Anzahl an Clients
 eintragen und so die Teilnehmeranzahl von Laptops festlegen.
-Im ersten Schritt empfängt der Master die IP Adresse der Clients und trägt sie in eine StringList ein. Dies passiert nur, wenn die IP Adresse noch nicht, in der besagte List vorhanden ist.
+Im ersten Schritt empfängt der Master die IP Adresse der Clients und trägt sie in eine StringList ein. Dies passiert nur, wenn die IP Adresse noch nicht in der besagten List vorhanden ist.
 
 ```
 //Listen to hey
@@ -100,7 +131,7 @@ void sendId() {
 ```
 
 Um sicher zu stellen das alle Laptops noch im Netzwerk sind, wird die StringList mit allen IP-Adressen nach immer 5 Sekunden zurückgesetzt.
-Nachdem diese Liste gelösch wurde, erwartet der Master ein erneutes Lebenssignal von den Clients und trägt diese dann in eine neue
+Nachdem diese Liste gelöscht wurde, erwartet der Master ein erneutes Lebenssignal von den Clients und trägt diese dann in eine neue
 Liste ein. Dieser Kreislauf wird während der gesamten Performance immer wieder durchgeführt.
 
 ```
@@ -113,9 +144,9 @@ Liste ein. Dieser Kreislauf wird während der gesamten Performance immer wieder 
 ```
 
 
-Ein vorheriges angepasstes Paket, das die Parameter und Einstellungen der Waves beinhaltet, wird bei dem drücken des Senden-Knopfes
-im Master-Interface, an jegliche Clients gesendet.
-Um jedoch zu vermeiden, dass dieses Paket auf allen Rechnern gleichzeitig dargestellt wird, enthält es auch die spezifische IP-Adresse des empfangenden Laptops, der dieses Paket abspielen soll.
+Ein vorheriges angepasstes Paket, das die Parameter und Einstellungen der Waves beinhaltet, wird bei dem Drücken des Senden-Knopfes
+im Master-Interface an jegliche Clients gesendet.
+Um jedoch zu vermeiden, dass dieses Paket auf allen Rechnern gleichzeitig dargestellt wird, enthält es auch die spezifische ID des empfangenden Laptops, der dieses Paket abspielen soll.
 
 ```
 //send data (0 = type of wave; 1 = frequency; 2 = amp)
@@ -172,7 +203,7 @@ void sendVelocity() {
 *Interface*
 
 Das Interface des Masters enthält im oberen Bereich einen Vorschaubereich der Visualisierung. Darunter befinden sich drei Osciliatoren mit den eingestellten Waveform "Sinewave", "Sawtooth" und "Squarewave".
-Hier lassen sich die Parameter mittels Drehreglern Frequenz, Amplitude und Dauer der Sendung einstellen.
+Hier lassen sich die Parameter Frequenz, Amplitude und Dauer der Sendung mittels Drehreglern einstellen.
 Unter dieser Einstellung der Waveform liegt ein Slider der die globale Geschwindigkeit der Visualisierung steuert.
 Zuletzt kann der Nutzer im untersten Bereich des Interfaces, den Knopf zur endgültigen Sendung des eingestellten Signals benutzten.
 
@@ -297,3 +328,19 @@ float mapSizeW(float size) {
 }
 ```
 Um die Größe (wie auch die Position im Raum) anzugeleichen wird mit einem einfachen Trick gearbeiet: Es wird mit einer übergreifenenden Laptopgröße und einer festen Auflösung gerechnet, beide werden dann auf die eigene Auflösung gemapped.
+
+Während des gesamten Zeit sendet jeder Client in einem gewissen Zeitintervall ein "Lebenszeichen" an den Masterrechner. 
+
+```
+//AliveMessage 
+    float d = 1/sendAliveTime;
+    if (millis()>(d*1000*sendAliveCounter)) {
+      sendAliveCounter++;
+      sendAlive();
+    }
+void sendAlive() {
+  OscMessage aliveMessage = new OscMessage("/alive");
+  aliveMessage.add(ID);
+  oscP5.send(aliveMessage, remoteLocation);
+}
+```
